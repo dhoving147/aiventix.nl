@@ -47,9 +47,9 @@
     pointer-events: none;
   }
   #wave-canvas {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
+    position: fixed;
+    inset: 0;
+    width: 100%; height: 100%;
     z-index: 0;
     pointer-events: none;
   }
@@ -1230,7 +1230,7 @@
 
     function resize() {
       W = c.width  = window.innerWidth;
-      H = c.height = document.body.scrollHeight;
+      H = c.height = window.innerHeight;
     }
     resize();
     window.addEventListener('resize', () => setTimeout(resize, 200), { passive: true });
@@ -1258,7 +1258,7 @@
 
       const s = edgePoint(startEdge);
       const e = edgePoint(endEdge);
-      const pts = buildBolt(s.x, s.y, e.x, e.y, 7);
+      const pts = buildBolt(s.x, s.y, e.x, e.y, 5);
 
       // Occasionally spawn a branch
       const branches = [];
@@ -1287,54 +1287,39 @@
     // Seed some bolts
     for (let i = 0; i < 3; i++) spawnBolt();
 
-    function drawBolt(pts, alpha, color, glowColor, width) {
+    function drawBolt(pts, alpha, color, width) {
       if (pts.length < 2) return;
-
-      // Glow layer
-      ctx.beginPath();
-      pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
-      ctx.strokeStyle = `rgba(${glowColor},${alpha * 0.3})`;
-      ctx.lineWidth = width * 8;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      ctx.stroke();
-
-      // Core line
       ctx.beginPath();
       pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
       ctx.strokeStyle = `rgba(${color},${alpha})`;
       ctx.lineWidth = width;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
       ctx.stroke();
     }
 
     function draw(ts) {
-      if (ts - last < 25) { requestAnimationFrame(draw); return; } // ~40fps
+      if (ts - last < 50) { requestAnimationFrame(draw); return; } // 20fps
       last = ts;
       ctx.clearRect(0, 0, W, H);
 
-      // Randomly spawn new bolts
-      if (Math.random() < 0.04 && bolts.length < 6) spawnBolt();
+      if (Math.random() < 0.06 && bolts.length < 3) spawnBolt();
 
       for (let i = bolts.length - 1; i >= 0; i--) {
         const b = bolts[i];
-        const speed = 0.06;
-
         if (b.phase === 'in') {
-          b.alpha = Math.min(b.alpha + speed, b.maxAlpha);
+          b.alpha = Math.min(b.alpha + 0.08, b.maxAlpha);
           if (b.alpha >= b.maxAlpha) b.phase = 'hold';
         } else if (b.phase === 'hold') {
-          // Flicker
-          const flicker = 0.85 + Math.random() * 0.15;
-          b.alpha = b.maxAlpha * flicker;
-          b.held += 25;
+          b.alpha = b.maxAlpha * (0.85 + Math.random() * 0.15);
+          b.held += 50;
           if (b.held >= b.holdFor) b.phase = 'out';
         } else {
-          b.alpha = Math.max(b.alpha - speed * 1.5, 0);
+          b.alpha = Math.max(b.alpha - 0.1, 0);
           if (b.alpha <= 0) { bolts.splice(i, 1); continue; }
         }
-
-        drawBolt(b.pts, b.alpha, b.color, b.glowColor, b.width);
-        b.branches.forEach(br => drawBolt(br, b.alpha * 0.5, b.color, b.glowColor, b.width * 0.6));
+        drawBolt(b.pts, b.alpha, b.color, b.width);
+        b.branches.forEach(br => drawBolt(br, b.alpha * 0.4, b.color, b.width * 0.5));
       }
 
       requestAnimationFrame(draw);
