@@ -49,29 +49,47 @@
   .orb {
     position: fixed;
     border-radius: 50%;
-    filter: blur(80px);
+    filter: blur(100px);
     pointer-events: none;
     z-index: 0;
   }
   .orb-1 {
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(244,98,46,0.12) 0%, transparent 70%);
-    top: -200px; right: -200px;
-    animation: float1 8s ease-in-out infinite;
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(244,98,46,0.18) 0%, rgba(244,98,46,0.06) 40%, transparent 70%);
+    top: -300px; right: -200px;
+    animation: orbit1 14s ease-in-out infinite;
   }
   .orb-2 {
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(244,98,46,0.07) 0%, transparent 70%);
-    bottom: 20%; left: -100px;
-    animation: float2 11s ease-in-out infinite;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(244,98,46,0.12) 0%, rgba(244,98,46,0.04) 40%, transparent 70%);
+    bottom: 10%; left: -200px;
+    animation: orbit2 18s ease-in-out infinite;
   }
-  @keyframes float1 {
-    0%, 100% { transform: translate(0, 0); }
-    50% { transform: translate(-40px, 40px); }
+  .orb-3 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(244,98,46,0.10) 0%, transparent 70%);
+    top: 40%; left: 30%;
+    animation: orbit3 22s ease-in-out infinite;
   }
-  @keyframes float2 {
-    0%, 100% { transform: translate(0, 0); }
-    50% { transform: translate(30px, -30px); }
+  @keyframes orbit1 {
+    0%   { transform: translate(0, 0) scale(1); }
+    25%  { transform: translate(-120px, 80px) scale(1.1); }
+    50%  { transform: translate(-60px, 160px) scale(0.95); }
+    75%  { transform: translate(80px, 60px) scale(1.05); }
+    100% { transform: translate(0, 0) scale(1); }
+  }
+  @keyframes orbit2 {
+    0%   { transform: translate(0, 0) scale(1); }
+    33%  { transform: translate(140px, -100px) scale(1.15); }
+    66%  { transform: translate(60px, -180px) scale(0.9); }
+    100% { transform: translate(0, 0) scale(1); }
+  }
+  @keyframes orbit3 {
+    0%   { transform: translate(0, 0) scale(1); opacity: 0.6; }
+    25%  { transform: translate(200px, -80px) scale(1.2); opacity: 0.9; }
+    50%  { transform: translate(100px, 150px) scale(0.8); opacity: 0.5; }
+    75%  { transform: translate(-150px, 60px) scale(1.1); opacity: 0.8; }
+    100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
   }
 
   /* All content above bg */
@@ -576,13 +594,73 @@
     line-height: 1.6;
     position: relative; z-index: 1;
   }
-  .cta-box .btn-primary { position: relative; z-index: 1; }
+  .cta-box .btn-primary { position: relative; z-index: 1; margin-bottom: 16px; }
   .cta-note {
-    margin-top: 48px;
+    margin-top: 28px;
     font-size: 13px;
     color: var(--muted);
     position: relative; z-index: 1;
   }
+  .scarcity {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--orange-bg);
+    border: 1px solid rgba(244,98,46,0.25);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--orange);
+    margin-bottom: 24px;
+    position: relative; z-index: 1;
+  }
+  .scarcity-dot {
+    width: 7px; height: 7px;
+    background: var(--orange);
+    border-radius: 50%;
+    animation: pulse-dot 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+  .faq-list { margin-top: 48px; display: flex; flex-direction: column; }
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 24px 0;
+    cursor: pointer;
+  }
+  .faq-item:first-child { border-top: 1px solid var(--border); }
+  .faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    gap: 16px;
+  }
+  .faq-icon {
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    color: var(--orange);
+    transition: transform 0.3s;
+  }
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+  .faq-answer {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s;
+  }
+  .faq-item.open .faq-answer { max-height: 200px; padding-top: 14px; }
   .calendly-wrap {
     margin-top: 48px;
     position: relative;
@@ -702,6 +780,45 @@
     pointer-events: none;
   }
 
+  /* AURORA HERO */
+  .aurora-wrap {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .aurora-horizon {
+    position: absolute;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 900px; height: 300px;
+    background: radial-gradient(ellipse at center bottom, rgba(244,98,46,0.55) 0%, rgba(244,98,46,0.15) 40%, transparent 70%);
+    filter: blur(30px);
+    animation: horizon-pulse 5s ease-in-out infinite;
+  }
+  @keyframes horizon-pulse {
+    0%, 100% { opacity: 0.8; transform: translateX(-50%) scaleX(1); }
+    50% { opacity: 1; transform: translateX(-50%) scaleX(1.08); }
+  }
+  .aurora-ray {
+    position: absolute;
+    bottom: 0;
+    width: 3px;
+    border-radius: 100px;
+    transform-origin: bottom center;
+    filter: blur(18px);
+    opacity: 0;
+    animation: ray-rise var(--dur) ease-in-out infinite var(--delay);
+  }
+  @keyframes ray-rise {
+    0%   { opacity: 0; transform: scaleY(0.2) skewX(var(--skew)); }
+    20%  { opacity: var(--max-opacity); }
+    80%  { opacity: var(--max-opacity); }
+    100% { opacity: 0; transform: scaleY(1) skewX(var(--skew)); }
+  }
+
   /* COUNTER ANIMATION */
   .count-up { display: inline-block; }
 
@@ -726,6 +843,7 @@
 <div class="grid-bg"></div>
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
 
 <div class="orange-stripe"></div>
 
@@ -750,6 +868,9 @@
 
 <!-- HERO -->
 <section class="hero">
+  <div class="aurora-wrap" id="aurora">
+    <div class="aurora-horizon"></div>
+  </div>
   <div class="container">
     <div class="eyebrow fade-up">AI Procesautomatisering voor MKB</div>
 
@@ -764,7 +885,7 @@
       <div class="hero-logo-wordmark"><span>Ai</span>ventix</div>
     </div>
 
-    <h1 class="fade-up fade-up-delay-2">Stop tijd te verliezen aan werk<br>dat een <span class="orange">systeem kan doen</span></h1>
+    <h1 class="fade-up fade-up-delay-2">Jouw team verliest elke week uren aan werk dat allang <span class="orange">geautomatiseerd had kunnen zijn</span></h1>
     <p class="fade-up fade-up-delay-3">Ik breng in kaart waar jouw bedrijf uren en euro's laat liggen en automatiseer het met AI.</p>
 
     <div class="hero-cta fade-up fade-up-delay-4">
@@ -869,22 +990,22 @@
       <div class="step fade-up fade-up-delay-1">
         <div class="step-num">01</div>
         <div>
-          <h3>Gratis AI Efficiëntie Scan</h3>
-          <p>We plannen een Deep Dive Call van 30-45 minuten. Ik breng samen met jou alle processen en workflows van je business in kaart — van sales tot operations tot administratie.</p>
+          <h3>We kijken samen naar je business</h3>
+          <p>In een call van 30-45 minuten nemen we een deep dive in je belangrijkste processen. Van leadopvolging en administratie tot rapportages en klantcommunicatie. Ik breng in kaart waar de meeste tijd verloren gaat en waar de grootste kansen liggen.</p>
         </div>
       </div>
       <div class="step fade-up fade-up-delay-2">
         <div class="step-num">02</div>
         <div>
-          <h3>Rapport binnen 72 uur</h3>
-          <p>Je ontvangt een gepersonaliseerd rapport met alle automatiseringsmogelijkheden, hun ROI in uren en euro's, en een geprioriteerd actieplan gerangschikt op snelste terugverdientijd.</p>
+          <h3>Je krijgt een professioneel rapport</h3>
+          <p>Binnen 72 uur ontvang je een uitgebreide analyse op maat. Waar laat je geld liggen, welke automatiseringen geven de hoogste ROI, wat is de terugverdientijd per oplossing en hoeveel uur je team wekelijks terugkrijgt. Concreet, cijfermatig en direct toepasbaar.</p>
         </div>
       </div>
       <div class="step fade-up fade-up-delay-3">
         <div class="step-num">03</div>
         <div>
-          <h3>Automatisering bouwen (optioneel)</h3>
-          <p>Wil je dat ik de automatiseringen voor je bouw en inricht? Dan gaan we aan de slag. Geen lange contracten, geen verrassingen. Je betaalt alleen voor wat je wilt laten bouwen.</p>
+          <h3>Jij kiest wat je ermee doet</h3>
+          <p>Wil je het zelf oppakken? Prima. Wil je dat ik het bouw? Dan gaan we aan de slag. Geen gedoe, geen verplichtingen. Je betaalt alleen als je wil dat ik het voor je regel.</p>
         </div>
       </div>
     </div>
@@ -909,27 +1030,27 @@
         <div class="offer-items">
           <div class="offer-item">
             <div class="offer-check">✓</div>
-            <p>Een overzicht van alle automatiseringsmogelijkheden in jouw bedrijf + hun exacte ROI in uren en euro's</p>
+            <p>Precies hoeveel geld jouw bedrijf maandelijks verliest aan handmatig werk</p>
           </div>
           <div class="offer-item">
             <div class="offer-check">✓</div>
-            <p>Inzicht in hoeveel geld je maandelijks laat liggen aan handmatig werk</p>
+            <p>Alle automatiseringsmogelijkheden in jouw bedrijf, gerangschikt op hoogste ROI</p>
           </div>
           <div class="offer-item">
             <div class="offer-check">✓</div>
-            <p>Concrete tooladviezen die je zelf kunt implementeren — zonder developer of technische kennis</p>
+            <p>De terugverdientijd per automatisering, zodat je weet wat je eerst aanpakt</p>
           </div>
           <div class="offer-item">
             <div class="offer-check">✓</div>
-            <p>Een geprioriteerd actieplan gerangschikt op snelste terugverdientijd</p>
+            <p>Hoeveel uur je team wekelijks terugkrijgt na implementatie</p>
           </div>
           <div class="offer-item">
             <div class="offer-check">✓</div>
-            <p>Een schatting van hoeveel uur je team wekelijks terugkrijgt na implementatie</p>
+            <p>Concrete tooladviezen die je direct kunt implementeren, zonder technische kennis</p>
           </div>
           <div class="offer-item">
             <div class="offer-check">✓</div>
-            <p>Deep Dive Call van 30-45 minuten + rapport binnen 72 uur in je inbox</p>
+            <p>Een geprioriteerd actieplan zodat je morgen al kunt beginnen</p>
           </div>
         </div>
         <div class="offer-footer">
@@ -949,14 +1070,46 @@
 
 
 <hr class="divider">
+<!-- FAQ -->
+<section>
+  <div class="container">
+    <div class="section-label fade-up">Veelgestelde vragen</div>
+    <h2 class="section-title fade-up fade-up-delay-1">Nog vragen?</h2>
+    <div class="faq-list fade-up fade-up-delay-2">
+      <div class="faq-item">
+        <div class="faq-question">Hoeveel tijd kost het mij?<div class="faq-icon">+</div></div>
+        <div class="faq-answer">De Deep Dive Call duurt 30-45 minuten. Daarna doe ik het werk. Je hoeft verder niks te doen — het rapport ligt binnen 72 uur in je inbox.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Wat als ik niet technisch ben?<div class="faq-icon">+</div></div>
+        <div class="faq-answer">Geen probleem. Je hoeft helemaal niks technisch te weten. Ik leg alles in gewone taal uit en geef je concrete adviezen die je zelf kunt oppakken — of ik bouw het gewoon voor je.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Zit ik ergens aan vast?<div class="faq-icon">+</div></div>
+        <div class="faq-answer">Nee. De scan is volledig gratis en zonder verplichtingen. Je besluit daarna zelf of je verder wilt. Geen contract, geen factuur, geen verrassingen.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Voor welke bedrijven is dit geschikt?<div class="faq-icon">+</div></div>
+        <div class="faq-answer">Voor MKB-bedrijven met 5 tot 100 medewerkers die merken dat handmatige processen tijd kosten. Sector maakt niet uit — ik heb gewerkt met recruitment, e-commerce, marketing en meer.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Wat als de scan niks oplevert?<div class="faq-icon">+</div></div>
+        <div class="faq-answer">Dan heb je alsnog een gratis analyse van je bedrijfsprocessen. Maar eerlijk gezegd: ik heb nog geen bedrijf gezien dat géén tijd verliest aan handmatig werk.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
 <!-- CTA -->
 <section class="cta-section">
   <div class="container">
     <div class="cta-box fade-up">
+      <div class="scarcity"><div class="scarcity-dot"></div> Nog 3 plekken beschikbaar deze maand</div>
       <h2>Klaar om tijd terug te winnen?</h2>
       <p>Plan een gratis AI Efficiëntie Scan en ontdek hoeveel uren en euro's jouw bedrijf elke week laat liggen.</p>
       <a href="https://calendly.com/dhoving147/strategy-call" target="_blank" class="btn-primary">Plan jouw gratis scan →</a>
-      <p class="cta-note">30-45 minuten call · Rapport binnen 72 uur · Geen verplichtingen</p>
+      <p class="cta-note" style="white-space: nowrap;">30-45 minuten call &nbsp;·&nbsp; Rapport binnen 72 uur &nbsp;·&nbsp; Geen verplichtingen</p>
     </div>
   </div>
 </section>
@@ -1090,6 +1243,52 @@
     });
   }, { threshold: 0.5 });
   document.querySelectorAll('[data-count]').forEach(el => statObserver.observe(el));
+
+  // ── AURORA RAYS ────────────────────────────────────────────
+  const aurora = document.getElementById('aurora');
+  const rayColors = [
+    'rgba(244,98,46,VAR)',
+    'rgba(255,140,60,VAR)',
+    'rgba(244,60,20,VAR)',
+    'rgba(255,180,80,VAR)',
+  ];
+  const rayConfigs = [
+    { left: '8%',  height: '75vh', width: '60px',  dur: '7s',  delay: '0s',   skew: '-4deg', op: '0.55' },
+    { left: '18%', height: '60vh', width: '40px',  dur: '9s',  delay: '1.5s', skew: '-2deg', op: '0.4'  },
+    { left: '28%', height: '85vh', width: '80px',  dur: '11s', delay: '0.5s', skew: '-1deg', op: '0.65' },
+    { left: '38%', height: '55vh', width: '35px',  dur: '8s',  delay: '3s',   skew: '1deg',  op: '0.35' },
+    { left: '50%', height: '90vh', width: '100px', dur: '13s', delay: '0s',   skew: '0deg',  op: '0.7'  },
+    { left: '60%', height: '65vh', width: '50px',  dur: '10s', delay: '2s',   skew: '2deg',  op: '0.45' },
+    { left: '70%', height: '80vh', width: '70px',  dur: '12s', delay: '1s',   skew: '3deg',  op: '0.6'  },
+    { left: '80%', height: '50vh', width: '30px',  dur: '8s',  delay: '4s',   skew: '4deg',  op: '0.3'  },
+    { left: '90%', height: '70vh', width: '55px',  dur: '9s',  delay: '2.5s', skew: '5deg',  op: '0.5'  },
+  ];
+
+  rayConfigs.forEach((cfg, i) => {
+    const ray = document.createElement('div');
+    ray.className = 'aurora-ray';
+    const color = rayColors[i % rayColors.length].replace('VAR', cfg.op);
+    ray.style.cssText = `
+      left: ${cfg.left};
+      height: ${cfg.height};
+      width: ${cfg.width};
+      background: linear-gradient(to top, ${color}, transparent);
+      --dur: ${cfg.dur};
+      --delay: ${cfg.delay};
+      --skew: ${cfg.skew};
+      --max-opacity: ${cfg.op};
+    `;
+    aurora.appendChild(ray);
+  });
+
+  // ── FAQ TOGGLE ─────────────────────────────────────────────
+  document.querySelectorAll('.faq-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
 
   // ── PARALLAX ORBS ON SCROLL ────────────────────────────────
   const orb1 = document.querySelector('.orb-1');
