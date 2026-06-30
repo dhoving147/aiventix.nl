@@ -47,9 +47,9 @@
     pointer-events: none;
   }
   #wave-canvas {
-    position: fixed;
-    inset: 0;
-    width: 100%; height: 100%;
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
     z-index: 0;
     pointer-events: none;
   }
@@ -1221,106 +1221,81 @@
   });
 
 
-  // ── LIGHTNING CANVAS ───────────────────────────────────────
+  // ── NEURAL NETWORK CANVAS ──────────────────────────────────
   (function() {
     const c = document.getElementById('wave-canvas');
     const ctx = c.getContext('2d');
-    let W, H, last = 0;
-    const bolts = [];
+    let W, VH, PH, last = 0;
+    const CONNECT_DIST = 200;
+    const BUFFER = 300; // px buiten viewport nog tekenen
+    let nodes = [];
 
     function resize() {
-      W = c.width  = window.innerWidth;
-      H = c.height = window.innerHeight;
+      W  = c.width  = window.innerWidth;
+      VH = window.innerHeight;
+      PH = c.height = document.body.scrollHeight;
+      // Herverdeel nodes over de volledige paginahoogte
+      const COUNT = Math.round((W * PH) / 14000); // dichtheid schaalt mee
+      nodes = Array.from({ length: Math.min(COUNT, 180) }, () => ({
+        x:  Math.random() * W,
+        y:  Math.random() * PH,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        r:  1.2 + Math.random() * 2,
+        pulse: Math.random() * Math.PI * 2,
+      }));
     }
     resize();
-    window.addEventListener('resize', () => setTimeout(resize, 200), { passive: true });
-
-    // Build a jagged lightning path via recursive midpoint displacement
-    function buildBolt(x1, y1, x2, y2, depth) {
-      if (depth === 0) return [{x: x1, y: y1}, {x: x2, y: y2}];
-      const mx = (x1 + x2) / 2 + (Math.random() - 0.5) * (Math.hypot(x2-x1, y2-y1) * 0.6);
-      const my = (y1 + y2) / 2 + (Math.random() - 0.5) * (Math.hypot(x2-x1, y2-y1) * 0.6);
-      return [...buildBolt(x1, y1, mx, my, depth-1), ...buildBolt(mx, my, x2, y2, depth-1).slice(1)];
-    }
-
-    function spawnBolt() {
-      // Random start edge, random end edge — can go any direction
-      const edges = ['top','bottom','left','right'];
-      const startEdge = edges[Math.floor(Math.random() * 4)];
-      const endEdge   = edges.filter(e => e !== startEdge)[Math.floor(Math.random() * 3)];
-
-      function edgePoint(edge) {
-        if (edge === 'top')    return { x: Math.random() * W, y: 0 };
-        if (edge === 'bottom') return { x: Math.random() * W, y: H };
-        if (edge === 'left')   return { x: 0, y: Math.random() * H };
-        return { x: W, y: Math.random() * H };
-      }
-
-      const s = edgePoint(startEdge);
-      const e = edgePoint(endEdge);
-      const pts = buildBolt(s.x, s.y, e.x, e.y, 5);
-
-      // Occasionally spawn a branch
-      const branches = [];
-      if (Math.random() < 0.6) {
-        const bi = Math.floor(pts.length * (0.2 + Math.random() * 0.5));
-        const bp = pts[bi];
-        const bx = bp.x + (Math.random() - 0.5) * W * 0.4;
-        const by = bp.y + (Math.random() - 0.5) * H * 0.4;
-        branches.push(buildBolt(bp.x, bp.y, bx, by, 5));
-      }
-
-      const isWhite = Math.random() < 0.25;
-      bolts.push({
-        pts, branches,
-        alpha: 0,
-        maxAlpha: 0.35 + Math.random() * 0.45,
-        phase: 'in',         // 'in' | 'hold' | 'out'
-        holdFor: 80 + Math.random() * 200,
-        held: 0,
-        width: 0.8 + Math.random() * 1.4,
-        color: isWhite ? '255,255,255' : '244,98,46',
-        glowColor: isWhite ? '200,160,255' : '244,98,46',
-      });
-    }
-
-    // Seed some bolts
-    for (let i = 0; i < 3; i++) spawnBolt();
-
-    function drawBolt(pts, alpha, color, width) {
-      if (pts.length < 2) return;
-      ctx.beginPath();
-      pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
-      ctx.strokeStyle = `rgba(${color},${alpha})`;
-      ctx.lineWidth = width;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      ctx.stroke();
-    }
+    window.addEventListener('resize', () => setTimeout(resize, 250), { passive: true });
 
     function draw(ts) {
-      if (ts - last < 50) { requestAnimationFrame(draw); return; } // 20fps
+      if (ts - last < 33) { requestAnimationFrame(draw); return; }
       last = ts;
-      ctx.clearRect(0, 0, W, H);
 
-      if (Math.random() < 0.06 && bolts.length < 3) spawnBolt();
+      const scrollY = window.scrollY;
+      const top    = scrollY - BUFFER;
+      const bottom = scrollY + VH + BUFFER;
 
-      for (let i = bolts.length - 1; i >= 0; i--) {
-        const b = bolts[i];
-        if (b.phase === 'in') {
-          b.alpha = Math.min(b.alpha + 0.08, b.maxAlpha);
-          if (b.alpha >= b.maxAlpha) b.phase = 'hold';
-        } else if (b.phase === 'hold') {
-          b.alpha = b.maxAlpha * (0.85 + Math.random() * 0.15);
-          b.held += 50;
-          if (b.held >= b.holdFor) b.phase = 'out';
-        } else {
-          b.alpha = Math.max(b.alpha - 0.1, 0);
-          if (b.alpha <= 0) { bolts.splice(i, 1); continue; }
+      // Wis alleen het zichtbare gebied
+      ctx.clearRect(0, top, W, VH + BUFFER * 2);
+
+      // Beweeg alle nodes, teken alleen zichtbare
+      nodes.forEach(n => {
+        n.x += n.vx; n.y += n.vy;
+        n.pulse += 0.01;
+        if (n.x < 0)  { n.x = 0;  n.vx *= -1; }
+        if (n.x > W)  { n.x = W;  n.vx *= -1; }
+        if (n.y < 0)  { n.y = 0;  n.vy *= -1; }
+        if (n.y > PH) { n.y = PH; n.vy *= -1; }
+      });
+
+      const visible = nodes.filter(n => n.y >= top && n.y <= bottom);
+
+      // Verbindingslijnen
+      for (let i = 0; i < visible.length; i++) {
+        for (let j = i + 1; j < visible.length; j++) {
+          const dx = visible[i].x - visible[j].x;
+          const dy = visible[i].y - visible[j].y;
+          const d  = Math.sqrt(dx*dx + dy*dy);
+          if (d > CONNECT_DIST) continue;
+          const alpha = (1 - d / CONNECT_DIST) * 0.30;
+          ctx.beginPath();
+          ctx.moveTo(visible[i].x, visible[i].y);
+          ctx.lineTo(visible[j].x, visible[j].y);
+          ctx.strokeStyle = `rgba(244,98,46,${alpha.toFixed(2)})`;
+          ctx.lineWidth = 0.7;
+          ctx.stroke();
         }
-        drawBolt(b.pts, b.alpha, b.color, b.width);
-        b.branches.forEach(br => drawBolt(br, b.alpha * 0.4, b.color, b.width * 0.5));
       }
+
+      // Nodes
+      visible.forEach(n => {
+        const p = 0.5 + 0.5 * Math.sin(n.pulse);
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r * (0.8 + p * 0.4), 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(244,98,46,${(0.45 + p * 0.45).toFixed(2)})`;
+        ctx.fill();
+      });
 
       requestAnimationFrame(draw);
     }
