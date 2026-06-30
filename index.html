@@ -46,50 +46,59 @@
     z-index: 0;
     pointer-events: none;
   }
+  #wave-canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
   .orb {
     position: fixed;
     border-radius: 50%;
-    filter: blur(100px);
+    filter: blur(80px);
     pointer-events: none;
     z-index: 0;
+    will-change: transform;
   }
+  /* Orb-1: groot, rechtsboven, loopt ver omlaag mee */
   .orb-1 {
-    width: 800px; height: 800px;
-    background: radial-gradient(circle, rgba(244,98,46,0.18) 0%, rgba(244,98,46,0.06) 40%, transparent 70%);
-    top: -300px; right: -200px;
-    animation: orbit1 14s ease-in-out infinite;
+    width: 1100px; height: 1100px;
+    background: radial-gradient(circle, rgba(244,98,46,0.20) 0%, rgba(244,98,46,0.07) 40%, transparent 68%);
+    top: -350px; right: -300px;
+    animation: orbit1 16s ease-in-out infinite;
   }
+  /* Orb-2: linksonder, subtiel, geeft kleur aan midden van pagina */
   .orb-2 {
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(244,98,46,0.12) 0%, rgba(244,98,46,0.04) 40%, transparent 70%);
-    bottom: 10%; left: -200px;
-    animation: orbit2 18s ease-in-out infinite;
+    width: 900px; height: 900px;
+    background: radial-gradient(circle, rgba(244,98,46,0.10) 0%, rgba(244,98,46,0.03) 45%, transparent 68%);
+    top: 55vh; left: -300px;
+    animation: orbit2 20s ease-in-out infinite;
   }
+  /* Orb-3: midden, drijft langzaam — zorgt voor doorlopende gloed */
   .orb-3 {
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(244,98,46,0.10) 0%, transparent 70%);
-    top: 40%; left: 30%;
-    animation: orbit3 22s ease-in-out infinite;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(244,98,46,0.08) 0%, transparent 68%);
+    top: 30vh; left: 20%;
+    animation: orbit3 26s ease-in-out infinite;
   }
   @keyframes orbit1 {
     0%   { transform: translate(0, 0) scale(1); }
-    25%  { transform: translate(-120px, 80px) scale(1.1); }
-    50%  { transform: translate(-60px, 160px) scale(0.95); }
-    75%  { transform: translate(80px, 60px) scale(1.05); }
+    30%  { transform: translate(-100px, 120px) scale(1.08); }
+    60%  { transform: translate(-40px, 220px) scale(0.96); }
     100% { transform: translate(0, 0) scale(1); }
   }
   @keyframes orbit2 {
     0%   { transform: translate(0, 0) scale(1); }
-    33%  { transform: translate(140px, -100px) scale(1.15); }
-    66%  { transform: translate(60px, -180px) scale(0.9); }
+    40%  { transform: translate(180px, -120px) scale(1.12); }
+    70%  { transform: translate(80px, -200px) scale(0.92); }
     100% { transform: translate(0, 0) scale(1); }
   }
   @keyframes orbit3 {
-    0%   { transform: translate(0, 0) scale(1); opacity: 0.6; }
-    25%  { transform: translate(200px, -80px) scale(1.2); opacity: 0.9; }
-    50%  { transform: translate(100px, 150px) scale(0.8); opacity: 0.5; }
-    75%  { transform: translate(-150px, 60px) scale(1.1); opacity: 0.8; }
-    100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+    0%   { transform: translate(0, 0) scale(1); opacity: 0.7; }
+    33%  { transform: translate(160px, -100px) scale(1.15); opacity: 1; }
+    66%  { transform: translate(-100px, 180px) scale(0.85); opacity: 0.6; }
+    100% { transform: translate(0, 0) scale(1); opacity: 0.7; }
   }
 
   /* All content above bg */
@@ -153,17 +162,17 @@
   /* FADE IN ANIMATIONS */
   .fade-up {
     opacity: 0;
-    transform: translateY(32px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
+    transform: translateY(12px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
   }
   .fade-up.visible {
     opacity: 1;
     transform: translateY(0);
   }
-  .fade-up-delay-1 { transition-delay: 0.1s; }
-  .fade-up-delay-2 { transition-delay: 0.2s; }
-  .fade-up-delay-3 { transition-delay: 0.3s; }
-  .fade-up-delay-4 { transition-delay: 0.4s; }
+  .fade-up-delay-1 { transition-delay: 0.03s; }
+  .fade-up-delay-2 { transition-delay: 0.06s; }
+  .fade-up-delay-3 { transition-delay: 0.09s; }
+  .fade-up-delay-4 { transition-delay: 0.12s; }
 
   /* HERO */
   .hero {
@@ -299,6 +308,14 @@
 
   /* SECTION */
   section { padding: 100px 0; position: relative; z-index: 1; }
+
+  /* SECTION FLOW — alternating subtle glow to guide the eye */
+  section:nth-child(even) {
+    background: linear-gradient(180deg, transparent 0%, rgba(244,98,46,0.025) 50%, transparent 100%);
+  }
+  section:nth-child(odd) {
+    background: linear-gradient(180deg, transparent 0%, rgba(11,10,9,0.4) 50%, transparent 100%);
+  }
   .section-label {
     font-size: 11px;
     font-weight: 600;
@@ -716,26 +733,6 @@
     transform: rotate(45deg);
   }
 
-  /* PARTICLES */
-  #particle-canvas {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    opacity: 0.6;
-  }
-
-  /* CURSOR GLOW */
-  .cursor-glow {
-    position: fixed;
-    width: 400px; height: 400px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(244,98,46,0.08) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-    transform: translate(-50%, -50%);
-    transition: opacity 0.3s;
-  }
 
   /* GLOW CARD BORDER */
   .problem-card {
@@ -783,10 +780,13 @@
   /* AURORA HERO */
   .aurora-wrap {
     position: absolute;
-    inset: 0;
+    top: 0; left: 0; right: 0;
+    bottom: -200px; /* extend below hero */
     overflow: hidden;
     pointer-events: none;
     z-index: 0;
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
   }
   .aurora-horizon {
     position: absolute;
@@ -823,23 +823,52 @@
   .count-up { display: inline-block; }
 
   @media (max-width: 680px) {
+    /* Layout */
     .stats { grid-template-columns: 1fr; }
     .problem-grid { grid-template-columns: 1fr; }
     .offer-items { grid-template-columns: 1fr; }
     .about-grid { grid-template-columns: 1fr; gap: 32px; }
-    .hero { padding: 140px 0 80px; }
-    .cta-box { padding: 48px 24px; }
-    .offer-body { padding: 24px; }
-    .hero-logo-wordmark { font-size: 40px; }
-    .hero-logo-icon { width: 56px; height: 56px; border-radius: 14px; }
+
+    /* Spacing */
+    .hero { padding: 120px 0 60px; }
+    .cta-box { padding: 36px 20px; }
+    .offer-body { padding: 20px; }
+    .offer-header { padding: 20px; }
+    section { padding: 64px 0; }
+    .container { padding: 0 20px; }
+
+    /* Logo */
+    .hero-logo { gap: 12px; margin-bottom: 28px; }
+    .hero-logo-wordmark { font-size: 36px; }
+    .hero-logo-icon { width: 52px; height: 52px; border-radius: 13px; }
+
+    /* Typography */
+    .hero h1 { font-size: 28px; }
+    .hero p { font-size: 16px; }
+    .section-title { font-size: 26px; }
+    .faq-question { font-size: 15px; }
+    .stat-num { font-size: 32px; }
+
+    /* Buttons */
+    .btn-primary { width: 100%; text-align: center; justify-content: center; padding: 16px 24px; }
+    .hero-cta { flex-direction: column; width: 100%; }
+    .btn-secondary { padding: 8px 0; }
+
+    /* Nav */
+    .nav-cta { font-size: 13px; padding: 8px 16px; }
+
+    /* Hide particles on mobile for performance */
+    #particle-canvas { display: none; }
+    .cursor-glow { display: none; }
+    .orb-3 { display: none; }
+    .aurora-ray { filter: blur(12px); }
   }
 </style>
 </head>
 <body>
 
 <!-- BACKGROUND -->
-<canvas id="particle-canvas"></canvas>
-<div class="cursor-glow" id="cursorGlow"></div>
+<canvas id="wave-canvas"></canvas>
 <div class="grid-bg"></div>
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
@@ -915,8 +944,9 @@
 </section>
 
 
+<div class="divider"></div>
+
 <!-- PROBLEMS -->
-<hr class="divider">
 <section>
   <div class="container">
     <div class="section-label fade-up">Het probleem</div>
@@ -979,7 +1009,8 @@
 </section>
 
 
-<hr class="divider">
+<div class="divider"></div>
+
 <!-- HOW IT WORKS -->
 <section id="hoe-het-werkt" style="padding-bottom: 64px;">
   <div class="container">
@@ -1013,7 +1044,8 @@
 </section>
 
 
-<hr class="divider">
+<div class="divider"></div>
+
 <!-- OFFER -->
 <section>
   <div class="container">
@@ -1069,7 +1101,8 @@
 
 
 
-<hr class="divider">
+<div class="divider"></div>
+
 <!-- FAQ -->
 <section>
   <div class="container">
@@ -1100,7 +1133,8 @@
   </div>
 </section>
 
-<hr class="divider">
+<div class="divider"></div>
+
 <!-- CTA -->
 <section class="cta-section">
   <div class="container">
@@ -1138,82 +1172,14 @@
 <div class="orange-stripe"></div>
 
 <script>
-  // ── PARTICLES ──────────────────────────────────────────────
-  const canvas = document.getElementById('particle-canvas');
-  const ctx = canvas.getContext('2d');
-  let W, H, particles = [];
 
-  function resize() {
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  function randomParticle() {
-    return {
-      x: Math.random() * W,
-      y: Math.random() * H,
-      r: Math.random() * 1.5 + 0.3,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-      alpha: Math.random() * 0.5 + 0.1,
-      pulse: Math.random() * Math.PI * 2,
-    };
-  }
-
-  for (let i = 0; i < 90; i++) particles.push(randomParticle());
-
-  function drawParticles() {
-    ctx.clearRect(0, 0, W, H);
-    particles.forEach(p => {
-      p.pulse += 0.012;
-      p.x += p.vx;
-      p.y += p.vy;
-      if (p.x < 0) p.x = W;
-      if (p.x > W) p.x = 0;
-      if (p.y < 0) p.y = H;
-      if (p.y > H) p.y = 0;
-      const a = p.alpha * (0.6 + 0.4 * Math.sin(p.pulse));
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(244,98,46,${a})`;
-      ctx.fill();
-    });
-
-    // Draw connecting lines between nearby particles
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 120) {
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(244,98,46,${0.06 * (1 - dist / 120)})`;
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
-        }
-      }
-    }
-    requestAnimationFrame(drawParticles);
-  }
-  drawParticles();
-
-  // ── CURSOR GLOW ────────────────────────────────────────────
-  const glow = document.getElementById('cursorGlow');
-  document.addEventListener('mousemove', e => {
-    glow.style.left = e.clientX + 'px';
-    glow.style.top = e.clientY + 'px';
-  });
 
   // ── FADE UP ON SCROLL ──────────────────────────────────────
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(el => {
       if (el.isIntersecting) el.target.classList.add('visible');
     });
-  }, { threshold: 0.12 });
+  }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
   setTimeout(() => {
     document.querySelectorAll('.hero .fade-up').forEach(el => el.classList.add('visible'));
@@ -1244,42 +1210,6 @@
   }, { threshold: 0.5 });
   document.querySelectorAll('[data-count]').forEach(el => statObserver.observe(el));
 
-  // ── AURORA RAYS ────────────────────────────────────────────
-  const aurora = document.getElementById('aurora');
-  const rayColors = [
-    'rgba(244,98,46,VAR)',
-    'rgba(255,140,60,VAR)',
-    'rgba(244,60,20,VAR)',
-    'rgba(255,180,80,VAR)',
-  ];
-  const rayConfigs = [
-    { left: '8%',  height: '75vh', width: '60px',  dur: '7s',  delay: '0s',   skew: '-4deg', op: '0.55' },
-    { left: '18%', height: '60vh', width: '40px',  dur: '9s',  delay: '1.5s', skew: '-2deg', op: '0.4'  },
-    { left: '28%', height: '85vh', width: '80px',  dur: '11s', delay: '0.5s', skew: '-1deg', op: '0.65' },
-    { left: '38%', height: '55vh', width: '35px',  dur: '8s',  delay: '3s',   skew: '1deg',  op: '0.35' },
-    { left: '50%', height: '90vh', width: '100px', dur: '13s', delay: '0s',   skew: '0deg',  op: '0.7'  },
-    { left: '60%', height: '65vh', width: '50px',  dur: '10s', delay: '2s',   skew: '2deg',  op: '0.45' },
-    { left: '70%', height: '80vh', width: '70px',  dur: '12s', delay: '1s',   skew: '3deg',  op: '0.6'  },
-    { left: '80%', height: '50vh', width: '30px',  dur: '8s',  delay: '4s',   skew: '4deg',  op: '0.3'  },
-    { left: '90%', height: '70vh', width: '55px',  dur: '9s',  delay: '2.5s', skew: '5deg',  op: '0.5'  },
-  ];
-
-  rayConfigs.forEach((cfg, i) => {
-    const ray = document.createElement('div');
-    ray.className = 'aurora-ray';
-    const color = rayColors[i % rayColors.length].replace('VAR', cfg.op);
-    ray.style.cssText = `
-      left: ${cfg.left};
-      height: ${cfg.height};
-      width: ${cfg.width};
-      background: linear-gradient(to top, ${color}, transparent);
-      --dur: ${cfg.dur};
-      --delay: ${cfg.delay};
-      --skew: ${cfg.skew};
-      --max-opacity: ${cfg.op};
-    `;
-    aurora.appendChild(ray);
-  });
 
   // ── FAQ TOGGLE ─────────────────────────────────────────────
   document.querySelectorAll('.faq-item').forEach(item => {
@@ -1290,18 +1220,133 @@
     });
   });
 
-  // ── PARALLAX ORBS ON SCROLL ────────────────────────────────
-  const orb1 = document.querySelector('.orb-1');
-  const orb2 = document.querySelector('.orb-2');
-  window.addEventListener('scroll', () => {
-    const sy = window.scrollY;
-    orb1.style.transform = `translate(${-sy * 0.04}px, ${sy * 0.06}px)`;
-    orb2.style.transform = `translate(${sy * 0.03}px, ${-sy * 0.04}px)`;
 
-    // Nav
+  // ── LIGHTNING CANVAS ───────────────────────────────────────
+  (function() {
+    const c = document.getElementById('wave-canvas');
+    const ctx = c.getContext('2d');
+    let W, H, last = 0;
+    const bolts = [];
+
+    function resize() {
+      W = c.width  = window.innerWidth;
+      H = c.height = document.body.scrollHeight;
+    }
+    resize();
+    window.addEventListener('resize', () => setTimeout(resize, 200), { passive: true });
+
+    // Build a jagged lightning path via recursive midpoint displacement
+    function buildBolt(x1, y1, x2, y2, depth) {
+      if (depth === 0) return [{x: x1, y: y1}, {x: x2, y: y2}];
+      const mx = (x1 + x2) / 2 + (Math.random() - 0.5) * (Math.hypot(x2-x1, y2-y1) * 0.6);
+      const my = (y1 + y2) / 2 + (Math.random() - 0.5) * (Math.hypot(x2-x1, y2-y1) * 0.6);
+      return [...buildBolt(x1, y1, mx, my, depth-1), ...buildBolt(mx, my, x2, y2, depth-1).slice(1)];
+    }
+
+    function spawnBolt() {
+      // Random start edge, random end edge — can go any direction
+      const edges = ['top','bottom','left','right'];
+      const startEdge = edges[Math.floor(Math.random() * 4)];
+      const endEdge   = edges.filter(e => e !== startEdge)[Math.floor(Math.random() * 3)];
+
+      function edgePoint(edge) {
+        if (edge === 'top')    return { x: Math.random() * W, y: 0 };
+        if (edge === 'bottom') return { x: Math.random() * W, y: H };
+        if (edge === 'left')   return { x: 0, y: Math.random() * H };
+        return { x: W, y: Math.random() * H };
+      }
+
+      const s = edgePoint(startEdge);
+      const e = edgePoint(endEdge);
+      const pts = buildBolt(s.x, s.y, e.x, e.y, 7);
+
+      // Occasionally spawn a branch
+      const branches = [];
+      if (Math.random() < 0.6) {
+        const bi = Math.floor(pts.length * (0.2 + Math.random() * 0.5));
+        const bp = pts[bi];
+        const bx = bp.x + (Math.random() - 0.5) * W * 0.4;
+        const by = bp.y + (Math.random() - 0.5) * H * 0.4;
+        branches.push(buildBolt(bp.x, bp.y, bx, by, 5));
+      }
+
+      const isWhite = Math.random() < 0.25;
+      bolts.push({
+        pts, branches,
+        alpha: 0,
+        maxAlpha: 0.35 + Math.random() * 0.45,
+        phase: 'in',         // 'in' | 'hold' | 'out'
+        holdFor: 80 + Math.random() * 200,
+        held: 0,
+        width: 0.8 + Math.random() * 1.4,
+        color: isWhite ? '255,255,255' : '244,98,46',
+        glowColor: isWhite ? '200,160,255' : '244,98,46',
+      });
+    }
+
+    // Seed some bolts
+    for (let i = 0; i < 3; i++) spawnBolt();
+
+    function drawBolt(pts, alpha, color, glowColor, width) {
+      if (pts.length < 2) return;
+
+      // Glow layer
+      ctx.beginPath();
+      pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+      ctx.strokeStyle = `rgba(${glowColor},${alpha * 0.3})`;
+      ctx.lineWidth = width * 8;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.stroke();
+
+      // Core line
+      ctx.beginPath();
+      pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+      ctx.strokeStyle = `rgba(${color},${alpha})`;
+      ctx.lineWidth = width;
+      ctx.stroke();
+    }
+
+    function draw(ts) {
+      if (ts - last < 25) { requestAnimationFrame(draw); return; } // ~40fps
+      last = ts;
+      ctx.clearRect(0, 0, W, H);
+
+      // Randomly spawn new bolts
+      if (Math.random() < 0.04 && bolts.length < 6) spawnBolt();
+
+      for (let i = bolts.length - 1; i >= 0; i--) {
+        const b = bolts[i];
+        const speed = 0.06;
+
+        if (b.phase === 'in') {
+          b.alpha = Math.min(b.alpha + speed, b.maxAlpha);
+          if (b.alpha >= b.maxAlpha) b.phase = 'hold';
+        } else if (b.phase === 'hold') {
+          // Flicker
+          const flicker = 0.85 + Math.random() * 0.15;
+          b.alpha = b.maxAlpha * flicker;
+          b.held += 25;
+          if (b.held >= b.holdFor) b.phase = 'out';
+        } else {
+          b.alpha = Math.max(b.alpha - speed * 1.5, 0);
+          if (b.alpha <= 0) { bolts.splice(i, 1); continue; }
+        }
+
+        drawBolt(b.pts, b.alpha, b.color, b.glowColor, b.width);
+        b.branches.forEach(br => drawBolt(br, b.alpha * 0.5, b.color, b.glowColor, b.width * 0.6));
+      }
+
+      requestAnimationFrame(draw);
+    }
+    requestAnimationFrame(draw);
+  })();
+
+  // ── NAV SCROLL ─────────────────────────────────────────────
+  window.addEventListener('scroll', () => {
     document.querySelector('nav').style.background =
-      sy > 40 ? 'rgba(11,10,9,0.97)' : 'rgba(11,10,9,0.85)';
-  });
+      window.scrollY > 40 ? 'rgba(11,10,9,0.97)' : 'rgba(11,10,9,0.85)';
+  }, { passive: true });
 </script>
 
 </body>
