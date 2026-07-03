@@ -1,1313 +1,1794 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aiventix — AI Procesautomatisering voor MKB</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AiventixEén partner voor al je automatiseringen. AI-workflows gemaakt voor jouw bedrijf.">
+    <meta name="theme-color" content="#FFFFFF">
+    <meta property="og:title" content="AiventixEén partner voor al je automatiseringen">
+    <meta property="og:description" content="Geen losse tools, geen AI-stress. Eén partner die meeloopt, meedenkt en meebouwt.">
+    <meta property="og:type" content="website">
 
-  :root {
-    --bg: #0B0A09;
-    --card: #161412;
-    --border: rgba(255,255,255,0.07);
-    --text: #F5F4F2;
-    --muted: #8F8A84;
-    --orange: #F4622E;
-    --orange-bg: rgba(244,98,46,0.06);
-  }
+    <title>AiventixEén partner voor al je automatiseringen</title>
 
-  html { scroll-behavior: smooth; }
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--bg);
-    color: var(--text);
-    line-height: 1.65;
-    font-size: 17px;
-    overflow-x: hidden;
-  }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  /* ANIMATED BACKGROUND */
-  .bg-canvas {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-  }
-  .grid-bg {
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-    background-size: 72px 72px;
-    z-index: 0;
-    pointer-events: none;
-  }
-  #wave-canvas {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    z-index: 0;
-    pointer-events: none;
-  }
-  .orb {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(80px);
-    pointer-events: none;
-    z-index: 0;
-    will-change: transform;
-  }
-  /* Orb-1: groot, rechtsboven, loopt ver omlaag mee */
-  .orb-1 {
-    width: 1100px; height: 1100px;
-    background: radial-gradient(circle, rgba(244,98,46,0.20) 0%, rgba(244,98,46,0.07) 40%, transparent 68%);
-    top: -350px; right: -300px;
-    animation: orbit1 16s ease-in-out infinite;
-  }
-  /* Orb-2: linksonder, subtiel, geeft kleur aan midden van pagina */
-  .orb-2 {
-    width: 900px; height: 900px;
-    background: radial-gradient(circle, rgba(244,98,46,0.10) 0%, rgba(244,98,46,0.03) 45%, transparent 68%);
-    top: 55vh; left: -300px;
-    animation: orbit2 20s ease-in-out infinite;
-  }
-  /* Orb-3: midden, drijft langzaam — zorgt voor doorlopende gloed */
-  .orb-3 {
-    width: 700px; height: 700px;
-    background: radial-gradient(circle, rgba(244,98,46,0.08) 0%, transparent 68%);
-    top: 30vh; left: 20%;
-    animation: orbit3 26s ease-in-out infinite;
-  }
-  @keyframes orbit1 {
-    0%   { transform: translate(0, 0) scale(1); }
-    30%  { transform: translate(-100px, 120px) scale(1.08); }
-    60%  { transform: translate(-40px, 220px) scale(0.96); }
-    100% { transform: translate(0, 0) scale(1); }
-  }
-  @keyframes orbit2 {
-    0%   { transform: translate(0, 0) scale(1); }
-    40%  { transform: translate(180px, -120px) scale(1.12); }
-    70%  { transform: translate(80px, -200px) scale(0.92); }
-    100% { transform: translate(0, 0) scale(1); }
-  }
-  @keyframes orbit3 {
-    0%   { transform: translate(0, 0) scale(1); opacity: 0.7; }
-    33%  { transform: translate(160px, -100px) scale(1.15); opacity: 1; }
-    66%  { transform: translate(-100px, 180px) scale(0.85); opacity: 0.6; }
-    100% { transform: translate(0, 0) scale(1); opacity: 0.7; }
-  }
+        :root {
+            --bg: #FFFFFF;
+            --bg-light: #F9F8F7;
+            --border: #EEEEEE;
+            --text: #1F1F1F;
+            --text-light: #666666;
+            --orange: #F4622E;
+            --orange-light: rgba(244, 98, 46, 0.08);
 
-  /* All content above bg */
-  nav, main, footer { position: relative; z-index: 1; }
+            --spacing-xs: 8px;
+            --spacing-sm: 16px;
+            --spacing-md: 24px;
+            --spacing-lg: 48px;
+            --spacing-xl: 80px;
 
-  .container { max-width: 1000px; margin: 0 auto; padding: 0 32px; }
+            --radius: 8px;
+            --transition: all 0.3s ease;
+        }
 
-  /* NAV */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    background: rgba(11,10,9,0.85);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-    transition: background 0.3s;
-  }
-  .nav-inner {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 32px;
-    height: 68px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
-  }
-  .logo-icon {
-    width: 36px; height: 36px;
-    background: var(--orange);
-    border-radius: 9px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .logo-wordmark {
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    color: var(--text);
-  }
-  .logo-wordmark span { color: var(--orange); }
-  .nav-cta {
-    background: var(--orange);
-    color: #fff;
-    font-size: 14px;
-    font-weight: 600;
-    padding: 10px 22px;
-    border-radius: 6px;
-    text-decoration: none;
-    transition: opacity 0.2s, transform 0.2s;
-  }
-  .nav-cta:hover { opacity: 0.85; transform: translateY(-1px); }
+        html {
+            scroll-behavior: smooth;
+        }
 
-  /* FADE IN ANIMATIONS */
-  .fade-up {
-    opacity: 0;
-    transform: translateY(12px);
-    transition: opacity 0.25s ease, transform 0.25s ease;
-  }
-  .fade-up.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .fade-up-delay-1 { transition-delay: 0.03s; }
-  .fade-up-delay-2 { transition-delay: 0.06s; }
-  .fade-up-delay-3 { transition-delay: 0.09s; }
-  .fade-up-delay-4 { transition-delay: 0.12s; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            font-size: 16px;
+            overflow-x: hidden;
+        }
 
-  /* HERO */
-  .hero {
-    padding: 180px 0 100px;
-    text-align: center;
-    position: relative;
-  }
-  .eyebrow {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--orange);
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-  }
-  .eyebrow::before, .eyebrow::after {
-    content: '';
-    width: 32px; height: 1px;
-    background: var(--orange);
-    opacity: 0.5;
-  }
-  .hero-logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 48px;
-  }
-  .hero-logo-icon {
-    width: 80px; height: 80px;
-    background: var(--orange);
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 60px rgba(244,98,46,0.35);
-    animation: pulse-glow 3s ease-in-out infinite;
-  }
-  @keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 40px rgba(244,98,46,0.3); }
-    50% { box-shadow: 0 0 80px rgba(244,98,46,0.5); }
-  }
-  .hero-logo-wordmark {
-    font-size: 64px;
-    font-weight: 800;
-    letter-spacing: -2px;
-    color: var(--text);
-    line-height: 1;
-  }
-  .hero-logo-wordmark span { color: var(--orange); }
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            transition: box-shadow 0.3s;
+        }
 
-  .hero h1 {
-    font-size: clamp(32px, 5vw, 58px);
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    line-height: 1.1;
-    max-width: 760px;
-    margin: 0 auto 24px;
-  }
-  .hero h1 .orange { color: var(--orange); }
-  .hero p {
-    font-size: 19px;
-    color: var(--muted);
-    max-width: 520px;
-    margin: 0 auto 48px;
-    line-height: 1.6;
-  }
-  .hero-cta { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--orange);
-    color: #fff;
-    font-size: 16px;
-    font-weight: 700;
-    padding: 16px 36px;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
-  }
-  .btn-primary:hover {
-    opacity: 0.9;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(244,98,46,0.35);
-  }
-  .btn-secondary {
-    display: inline-block;
-    color: var(--muted);
-    font-size: 15px;
-    font-weight: 500;
-    padding: 16px 24px;
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .btn-secondary:hover { color: var(--text); }
+        nav.scrolled {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
 
-  /* STATS */
-  .stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
-    margin-top: 80px;
-  }
-  .stat {
-    background: var(--card);
-    padding: 36px 24px;
-    text-align: center;
-    transition: background 0.3s;
-  }
-  .stat:hover { background: #1a1714; }
-  .stat-num {
-    font-size: 40px;
-    font-weight: 800;
-    color: var(--orange);
-    letter-spacing: -1.5px;
-    line-height: 1;
-    margin-bottom: 10px;
-  }
-  .stat-label {
-    font-size: 14px;
-    color: var(--muted);
-    line-height: 1.4;
-  }
+        .nav-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 32px;
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-  /* SECTION */
-  section { padding: 100px 0; position: relative; z-index: 1; }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: var(--transition);
+        }
 
-  /* SECTION FLOW — alternating subtle glow to guide the eye */
-  section:nth-child(even) {
-    background: linear-gradient(180deg, transparent 0%, rgba(244,98,46,0.025) 50%, transparent 100%);
-  }
-  section:nth-child(odd) {
-    background: linear-gradient(180deg, transparent 0%, rgba(11,10,9,0.4) 50%, transparent 100%);
-  }
-  .section-label {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--orange);
-    margin-bottom: 16px;
-  }
-  .section-title {
-    font-size: clamp(28px, 4vw, 44px);
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    line-height: 1.15;
-    margin-bottom: 20px;
-  }
-  .section-sub {
-    font-size: 17px;
-    color: var(--muted);
-    max-width: 520px;
-    line-height: 1.65;
-  }
+        .logo:hover {
+            opacity: 0.85;
+        }
 
-  /* DIVIDER */
-  .divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--orange);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
 
-  /* PROBLEMS */
-  .problem-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    margin-top: 52px;
-  }
-  .problem-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 28px;
-    transition: border-color 0.3s, transform 0.3s;
-  }
-  .problem-card:hover {
-    border-color: rgba(244,98,46,0.3);
-    transform: translateY(-3px);
-  }
-  .problem-card .icon {
-    width: 52px;
-    height: 52px;
-    background: var(--orange-bg);
-    border: 1px solid rgba(244,98,46,0.2);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
-    transition: background 0.3s, border-color 0.3s;
-  }
-  .problem-card:hover .icon {
-    background: rgba(244,98,46,0.12);
-    border-color: rgba(244,98,46,0.4);
-  }
-  .problem-card h3 {
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 8px;
-  }
-  .problem-card p {
-    font-size: 14px;
-    color: var(--muted);
-    line-height: 1.6;
-  }
+        .logo-wordmark {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--text);
+        }
 
-  /* STEPS */
-  .steps-list {
-    margin-top: 52px;
-    display: flex;
-    flex-direction: column;
-  }
-  .step {
-    display: grid;
-    grid-template-columns: 56px 1fr;
-    gap: 24px;
-    padding: 36px 0;
-    border-bottom: 1px solid var(--border);
-    transition: padding-left 0.3s;
-  }
-  .step:last-child { border-bottom: none; padding-bottom: 0; }
-  .step:hover { padding-left: 8px; }
-  .step-num {
-    width: 42px; height: 42px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--orange);
-    flex-shrink: 0;
-    transition: background 0.3s, border-color 0.3s;
-  }
-  .step:hover .step-num {
-    background: var(--orange-bg);
-    border-color: rgba(244,98,46,0.3);
-  }
-  .step h3 {
-    font-size: 19px;
-    font-weight: 700;
-    margin-bottom: 8px;
-  }
-  .step p {
-    font-size: 15px;
-    color: var(--muted);
-    line-height: 1.65;
-  }
+        .logo-wordmark span {
+            color: var(--orange);
+        }
 
-  /* OFFER */
-  .offer-box {
-    margin-top: 52px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    overflow: hidden;
-    position: relative;
-  }
-  .offer-box::before {
-    content: '';
-    position: absolute;
-    top: -60px; right: -60px;
-    width: 240px; height: 240px;
-    background: radial-gradient(circle, rgba(244,98,46,0.12) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  .offer-header {
-    background: var(--orange-bg);
-    border-bottom: 1px solid rgba(244,98,46,0.12);
-    padding: 28px 36px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-  .offer-header h3 {
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-  }
-  .offer-badge {
-    background: var(--orange);
-    color: #fff;
-    font-size: 12px;
-    font-weight: 700;
-    padding: 6px 16px;
-    border-radius: 20px;
-    letter-spacing: 0.05em;
-  }
-  .offer-body { padding: 40px; }
-  .offer-items {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    margin-bottom: 40px;
-  }
-  .offer-item {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-  }
-  .offer-check {
-    width: 22px; height: 22px;
-    background: var(--orange-bg);
-    border: 1px solid rgba(244,98,46,0.3);
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 2px;
-    color: var(--orange);
-    font-size: 12px;
-    font-weight: 700;
-  }
-  .offer-item p {
-    font-size: 15px;
-    color: var(--text);
-    line-height: 1.5;
-  }
-  .offer-footer {
-    border-top: 1px solid var(--border);
-    padding-top: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  .offer-price { font-size: 14px; color: var(--muted); }
-  .offer-price strong {
-    font-size: 24px;
-    font-weight: 800;
-    color: var(--muted);
-    text-decoration: line-through;
-    margin-right: 10px;
-  }
-  .offer-price .free {
-    font-size: 24px;
-    font-weight: 800;
-    color: var(--orange);
-  }
+        .nav-cta {
+            background: var(--orange);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 10px 22px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
 
-  /* ABOUT */
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 64px;
-    align-items: center;
-    margin-top: 52px;
-  }
-  .about-text p {
-    font-size: 16px;
-    color: var(--muted);
-    line-height: 1.75;
-    margin-bottom: 16px;
-  }
-  .about-text p:last-child { margin-bottom: 0; }
-  .about-text strong { color: var(--text); }
-  .about-stats { display: flex; flex-direction: column; gap: 16px; }
-  .about-stat {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 22px 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    transition: border-color 0.3s, transform 0.3s;
-  }
-  .about-stat:hover {
-    border-color: rgba(244,98,46,0.3);
-    transform: translateX(4px);
-  }
-  .about-stat-num {
-    font-size: 30px;
-    font-weight: 800;
-    color: var(--orange);
-    letter-spacing: -1px;
-    flex-shrink: 0;
-    min-width: 64px;
-  }
-  .about-stat-label {
-    font-size: 14px;
-    color: var(--muted);
-    line-height: 1.4;
-  }
+        .nav-cta:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
 
-  /* CTA SECTION */
-  .cta-section { text-align: center; }
-  .cta-box {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 64px 48px 48px;
-    position: relative;
-    overflow: hidden;
-  }
-  .cta-box::before {
-    content: '';
-    position: absolute;
-    top: -100px; right: -100px;
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(244,98,46,0.1) 0%, transparent 70%);
-    animation: float1 6s ease-in-out infinite;
-  }
-  .cta-box::after {
-    content: '';
-    position: absolute;
-    bottom: -100px; left: -100px;
-    width: 300px; height: 300px;
-    background: radial-gradient(circle, rgba(244,98,46,0.06) 0%, transparent 70%);
-    animation: float2 8s ease-in-out infinite;
-  }
-  .cta-box h2 {
-    font-size: clamp(26px, 4vw, 42px);
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin-bottom: 16px;
-    position: relative; z-index: 1;
-  }
-  .cta-box p {
-    font-size: 17px;
-    color: var(--muted);
-    max-width: 480px;
-    margin: 0 auto 40px;
-    line-height: 1.6;
-    position: relative; z-index: 1;
-  }
-  .cta-box .btn-primary { position: relative; z-index: 1; margin-bottom: 16px; }
-  .cta-note {
-    margin-top: 28px;
-    font-size: 13px;
-    color: var(--muted);
-    position: relative; z-index: 1;
-  }
-  .scarcity {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--orange-bg);
-    border: 1px solid rgba(244,98,46,0.25);
-    border-radius: 20px;
-    padding: 6px 16px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--orange);
-    margin-bottom: 24px;
-    position: relative; z-index: 1;
-  }
-  .scarcity-dot {
-    width: 7px; height: 7px;
-    background: var(--orange);
-    border-radius: 50%;
-    animation: pulse-dot 1.5s ease-in-out infinite;
-  }
-  @keyframes pulse-dot {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(0.8); }
-  }
-  .faq-list { margin-top: 48px; display: flex; flex-direction: column; }
-  .faq-item {
-    border-bottom: 1px solid var(--border);
-    padding: 24px 0;
-    cursor: pointer;
-  }
-  .faq-item:first-child { border-top: 1px solid var(--border); }
-  .faq-question {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--text);
-    gap: 16px;
-  }
-  .faq-icon {
-    flex-shrink: 0;
-    width: 24px; height: 24px;
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 14px;
-    color: var(--orange);
-    transition: transform 0.3s;
-  }
-  .faq-item.open .faq-icon { transform: rotate(45deg); }
-  .faq-answer {
-    font-size: 15px;
-    color: var(--muted);
-    line-height: 1.7;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease, padding 0.3s;
-  }
-  .faq-item.open .faq-answer { max-height: 200px; padding-top: 14px; }
-  .calendly-wrap {
-    margin-top: 48px;
-    position: relative;
-    z-index: 1;
-    border-radius: 16px;
-    overflow: hidden;
-    border: 1px solid var(--border);
-  }
+        /* Animations */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
 
-  /* FOOTER */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 36px 0;
-    position: relative;
-    z-index: 1;
-  }
-  .footer-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-  .footer-text { font-size: 13px; color: var(--muted); }
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-  /* ORANGE STRIPE */
-  .orange-stripe { height: 4px; background: var(--orange); width: 100%; position: relative; z-index: 1; }
+        .fade-up-delay-1 { transition-delay: 0.1s; }
+        .fade-up-delay-2 { transition-delay: 0.2s; }
+        .fade-up-delay-3 { transition-delay: 0.3s; }
+        .fade-up-delay-4 { transition-delay: 0.4s; }
 
-  /* SCROLL INDICATOR */
-  .scroll-indicator {
-    position: absolute;
-    bottom: 32px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    color: var(--muted);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    animation: bounce 2s ease-in-out infinite;
-  }
-  @keyframes bounce {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(8px); }
-  }
-  .scroll-arrow {
-    width: 20px; height: 20px;
-    border-right: 2px solid var(--muted);
-    border-bottom: 2px solid var(--muted);
-    transform: rotate(45deg);
-  }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
 
+        /* Hero Section */
+        .hero {
+            padding: 160px 0 100px;
+            text-align: center;
+            position: relative;
+        }
 
-  /* GLOW CARD BORDER */
-  .problem-card {
-    position: relative;
-    overflow: hidden;
-  }
-  .problem-card::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: 13px;
-    background: linear-gradient(135deg, rgba(244,98,46,0) 0%, rgba(244,98,46,0.3) 50%, rgba(244,98,46,0) 100%);
-    opacity: 0;
-    transition: opacity 0.4s;
-    z-index: 0;
-  }
-  .problem-card:hover::before { opacity: 1; }
-  .problem-card > * { position: relative; z-index: 1; }
+        .hero-eyebrow {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--orange);
+            margin-bottom: 32px;
+            display: inline-block;
+        }
 
-  /* ANIMATED UNDERLINE on section labels */
-  .section-label {
-    display: inline-block;
-  }
+        .hero-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 48px;
+        }
 
-  /* GLOWING STEP NUMBERS on hover */
-  .step:hover .step-num {
-    box-shadow: 0 0 16px rgba(244,98,46,0.4);
-  }
+        .hero-logo-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--orange);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(244, 98, 46, 0.15);
+        }
 
-  /* SCAN line animation on offer box */
-  @keyframes scan {
-    0% { transform: translateY(-100%); }
-    100% { transform: translateY(400%); }
-  }
-  .offer-box::after {
-    content: '';
-    position: absolute;
-    left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(244,98,46,0.4), transparent);
-    animation: scan 4s linear infinite;
-    pointer-events: none;
-  }
+        .hero-logo-wordmark {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -2px;
+            color: var(--text);
+            line-height: 1;
+        }
 
-  /* AURORA HERO */
-  .aurora-wrap {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    bottom: -200px; /* extend below hero */
-    overflow: hidden;
-    pointer-events: none;
-    z-index: 0;
-    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
-  }
-  .aurora-horizon {
-    position: absolute;
-    bottom: -60px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 900px; height: 300px;
-    background: radial-gradient(ellipse at center bottom, rgba(244,98,46,0.55) 0%, rgba(244,98,46,0.15) 40%, transparent 70%);
-    filter: blur(30px);
-    animation: horizon-pulse 5s ease-in-out infinite;
-  }
-  @keyframes horizon-pulse {
-    0%, 100% { opacity: 0.8; transform: translateX(-50%) scaleX(1); }
-    50% { opacity: 1; transform: translateX(-50%) scaleX(1.08); }
-  }
-  .aurora-ray {
-    position: absolute;
-    bottom: 0;
-    width: 3px;
-    border-radius: 100px;
-    transform-origin: bottom center;
-    filter: blur(18px);
-    opacity: 0;
-    animation: ray-rise var(--dur) ease-in-out infinite var(--delay);
-  }
-  @keyframes ray-rise {
-    0%   { opacity: 0; transform: scaleY(0.2) skewX(var(--skew)); }
-    20%  { opacity: var(--max-opacity); }
-    80%  { opacity: var(--max-opacity); }
-    100% { opacity: 0; transform: scaleY(1) skewX(var(--skew)); }
-  }
+        .hero-logo-wordmark span {
+            color: var(--orange);
+        }
 
-  /* COUNTER ANIMATION */
-  .count-up { display: inline-block; }
+        .hero h1 {
+            font-size: clamp(32px, 5vw, 58px);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            max-width: 900px;
+            margin: 0 auto 24px;
+            color: var(--text);
+        }
 
-  @media (max-width: 680px) {
-    /* Layout */
-    .stats { grid-template-columns: 1fr; }
-    .problem-grid { grid-template-columns: 1fr; }
-    .offer-items { grid-template-columns: 1fr; }
-    .about-grid { grid-template-columns: 1fr; gap: 32px; }
+        .hero h1 .orange {
+            color: var(--orange);
+        }
 
-    /* Spacing */
-    .hero { padding: 120px 0 60px; }
-    .cta-box { padding: 36px 20px; }
-    .offer-body { padding: 20px; }
-    .offer-header { padding: 20px; }
-    section { padding: 64px 0; }
-    .container { padding: 0 20px; }
+        .hero p {
+            font-size: 18px;
+            color: var(--text-light);
+            max-width: 560px;
+            margin: 0 auto 48px;
+            line-height: 1.65;
+        }
 
-    /* Logo */
-    .hero-logo { gap: 12px; margin-bottom: 28px; }
-    .hero-logo-wordmark { font-size: 36px; }
-    .hero-logo-icon { width: 52px; height: 52px; border-radius: 13px; }
+        .hero-cta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
 
-    /* Typography */
-    .hero h1 { font-size: 28px; }
-    .hero p { font-size: 16px; }
-    .section-title { font-size: 26px; }
-    .faq-question { font-size: 15px; }
-    .stat-num { font-size: 32px; }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--orange);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 16px 36px;
+            border-radius: var(--radius);
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
 
-    /* Buttons */
-    .btn-primary { width: 100%; text-align: center; justify-content: center; padding: 16px 24px; }
-    .hero-cta { flex-direction: column; width: 100%; }
-    .btn-secondary { padding: 8px 0; }
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(244, 98, 46, 0.2);
+        }
 
-    /* Nav */
-    .nav-cta { font-size: 13px; padding: 8px 16px; }
+        .btn-full {
+            width: 100%;
+            justify-content: center;
+            margin-top: auto;
+        }
 
-    /* Hide particles on mobile for performance */
-    #particle-canvas { display: none; }
-    .cursor-glow { display: none; }
-    .orb-3 { display: none; }
-    .aurora-ray { filter: blur(12px); }
-  }
-</style>
+        .btn-secondary {
+            display: inline-block;
+            color: var(--text-light);
+            font-size: 15px;
+            font-weight: 500;
+            padding: 16px 24px;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .btn-secondary:hover {
+            color: var(--text);
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 80px;
+        }
+
+        .stat {
+            background: var(--bg);
+            padding: 36px 24px;
+            text-align: center;
+            transition: background 0.3s;
+        }
+
+        .stat:hover {
+            background: var(--bg-light);
+        }
+
+        .stat-num {
+            font-size: 40px;
+            font-weight: 800;
+            color: var(--orange);
+            letter-spacing: -1.5px;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        /* Sections */
+        section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        section:nth-child(even) {
+            background: var(--bg-light);
+        }
+
+        .section-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--orange);
+            margin-bottom: 16px;
+            display: inline-block;
+        }
+
+        .section-title {
+            font-size: clamp(28px, 4vw, 44px);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .section-sub {
+            font-size: 16px;
+            color: var(--text-light);
+            max-width: 560px;
+            line-height: 1.65;
+        }
+
+        /* Divider */
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 0;
+        }
+
+        /* Problem Grid */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 52px;
+        }
+
+        @media (max-width: 1024px) {
+            .problem-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .problem-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
+            transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .problem-card:hover {
+            border-color: var(--orange);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 16px rgba(244, 98, 46, 0.1);
+        }
+
+        .problem-card .icon {
+            width: 52px;
+            height: 52px;
+            background: var(--orange-light);
+            border: 1px solid rgba(244, 98, 46, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+
+        .problem-card:hover .icon {
+            background: var(--orange);
+        }
+
+        .problem-card:hover .icon svg {
+            stroke: #fff;
+        }
+
+        .problem-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .problem-card p {
+            font-size: 14px;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Build Grid */
+        .build-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 52px;
+        }
+
+        .build-item {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
+            text-align: center;
+            transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .build-item:hover {
+            border-color: var(--orange);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 16px rgba(244, 98, 46, 0.1);
+        }
+
+        .build-visual {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 16px;
+            display: block;
+        }
+
+        .build-item h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 1024px) {
+            .build-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 680px) {
+            .build-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Steps */
+        .steps-list {
+            margin-top: 52px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .step {
+            display: grid;
+            grid-template-columns: 56px 1fr;
+            gap: 24px;
+            padding: 36px 0;
+            border-bottom: 1px solid var(--border);
+            transition: padding-left 0.3s;
+        }
+
+        .step:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .step:hover {
+            padding-left: 8px;
+        }
+
+        .step-num {
+            width: 42px;
+            height: 42px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--orange);
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+
+        .step:hover .step-num {
+            background: var(--orange-light);
+            border-color: var(--orange);
+        }
+
+        .step h3 {
+            font-size: 19px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .step p {
+            font-size: 15px;
+            color: var(--text-light);
+            line-height: 1.65;
+        }
+
+        /* Offers Grid */
+        .offers-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 52px;
+            auto-rows: 1fr;
+        }
+
+        .offers-grid.offers-three {
+            grid-template-columns: repeat(3, 1fr);
+            auto-rows: 1fr;
+        }
+
+        @media (max-width: 1024px) {
+            .offers-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .offers-grid.offers-three {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 680px) {
+            .offers-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .offers-grid.offers-three {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Offer Cards */
+        .offer-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 40px 36px;
+            transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+        }
+
+        .offer-card > .offer-what,
+        .offer-card > .offer-scope,
+        .offer-card > .fase-info {
+            flex: 1;
+        }
+
+        .offer-card:hover {
+            border-color: var(--orange);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(244, 98, 46, 0.12);
+        }
+
+        .offer-1 {
+            border-color: #DDDDDD;
+        }
+
+        .offer-2 {
+            border-color: var(--orange);
+            border-width: 2px;
+            background: linear-gradient(135deg, var(--orange-light) 0%, var(--bg) 100%);
+        }
+
+        .offer-2:hover {
+            border-color: var(--orange);
+            box-shadow: 0 12px 48px rgba(244, 98, 46, 0.2);
+        }
+
+        .offer-3 {
+            border-color: #DDDDDD;
+        }
+
+        .offer-featured {
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 1024px) {
+            .offer-featured {
+                transform: scale(1);
+            }
+        }
+
+        .offer-badge-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .offer-tag {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--orange);
+            background: var(--orange-light);
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        .offer-tag-featured {
+            background: var(--orange);
+            color: #fff;
+        }
+
+        .popular-badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--orange);
+            background: var(--orange-light);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .offer-card h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+            letter-spacing: -0.3px;
+        }
+
+        .offer-desc {
+            font-size: 14px;
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .offer-what h4 {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text);
+            margin-bottom: 16px;
+            opacity: 0.7;
+        }
+
+        .offer-items {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 36px;
+        }
+
+        .offer-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .offer-check {
+            width: 20px;
+            height: 20px;
+            background: transparent;
+            border: 1.5px solid var(--orange);
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+            color: var(--orange);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .offer-item p {
+            font-size: 13px;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        .offer-main .offer-item p {
+            color: var(--text);
+        }
+
+        /* Timeline */
+        .offer-timeline {
+            background: var(--orange-light);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .timeline-dot {
+            width: 28px;
+            height: 28px;
+            background: var(--orange);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .timeline-item p {
+            font-size: 13px;
+            color: var(--text);
+            margin: 0;
+        }
+
+        /* Pricing */
+        .offer-price-intro {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .price-tag {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+        }
+
+        .price-tag .free {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--orange);
+        }
+
+        .price-tag .note {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .offer-pricing {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .offer-pricing p {
+            font-size: 14px;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .offer-pricing p:last-child {
+            margin-bottom: 0;
+        }
+
+        .pricing-note {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-top: 12px !important;
+            border-top: 1px solid var(--border);
+            padding-top: 12px;
+        }
+
+        .offer-price {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .price-display {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .price-display .amount {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--orange);
+        }
+
+        .price-display .note {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .offer-scope {
+            background: transparent;
+            padding: 20px 0;
+            border-top: 1px solid var(--border);
+            border-radius: 0;
+            margin-bottom: 0;
+        }
+
+        .offer-scope p {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 6px;
+        }
+
+        .offer-scope p:last-child {
+            margin-bottom: 0;
+        }
+
+        .offer-scope strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .offer-scope-white {
+            background: var(--white) !important;
+            border-top: none;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .offer-scope-white p {
+            font-size: 13px;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        .offer-scope-white strong {
+            color: var(--text);
+        }
+
+        .fase-note-small {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 44px;
+            text-align: center;
+        }
+
+        .fase-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .fase-info p {
+            font-size: 13px;
+            color: var(--text-light);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .fase-info p strong {
+            color: var(--text);
+        }
+
+        .offer-highlight {
+            background: var(--white);
+            border-left: 4px solid var(--orange);
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .offer-highlight p {
+            font-size: 14px;
+            color: var(--text);
+            margin: 0;
+        }
+
+        .offer-highlight-main {
+            background: var(--orange-light);
+            border-left-color: var(--orange);
+        }
+
+        /* Footer */
+        .offers-footer {
+            text-align: center;
+            margin-top: 64px;
+            padding: 48px;
+            background: var(--bg-light);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .offers-footer p {
+            font-size: 16px;
+            color: var(--text);
+            margin-bottom: 28px;
+        }
+
+        .offers-footer p strong {
+            color: var(--orange);
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
+            margin-top: 52px;
+        }
+
+        .about-text p {
+            font-size: 15px;
+            color: var(--text-light);
+            line-height: 1.75;
+            margin-bottom: 16px;
+        }
+
+        .about-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        .about-text strong {
+            color: var(--text);
+        }
+
+        .about-photo {
+            width: 100%;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, var(--orange-light) 0%, var(--bg-light) 100%);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 14px;
+            text-align: center;
+            padding: 24px;
+        }
+
+        /* FAQ */
+        .faq-list {
+            margin-top: 48px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+            padding: 24px 0;
+            cursor: pointer;
+        }
+
+        .faq-item:first-child {
+            border-top: 1px solid var(--border);
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            gap: 16px;
+        }
+
+        .faq-icon {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: var(--orange);
+            transition: transform 0.3s;
+            font-weight: 700;
+        }
+
+        .faq-item.open .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            font-size: 15px;
+            color: var(--text-light);
+            line-height: 1.7;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 250px;
+            padding-top: 14px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            background: var(--bg-light);
+        }
+
+        .cta-box {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 64px 48px;
+        }
+
+        .cta-box h2 {
+            font-size: clamp(26px, 4vw, 42px);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+
+        .cta-box p {
+            font-size: 16px;
+            color: var(--text-light);
+            max-width: 480px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        .cta-note {
+            margin-top: 28px;
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        /* Traject Section */
+        .traject-grid {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 52px;
+            flex-wrap: wrap;
+        }
+
+        .traject-step {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px 24px;
+            flex: 1;
+            min-width: 250px;
+            max-width: 300px;
+            text-align: center;
+            transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .traject-step:hover {
+            border-color: var(--orange);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 16px rgba(244, 98, 46, 0.1);
+        }
+
+        .traject-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: var(--orange-light);
+            border: 2px solid var(--orange);
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--orange);
+            margin: 0 auto 16px;
+        }
+
+        .traject-step h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .traject-step p {
+            font-size: 14px;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .traject-arrow {
+            font-size: 28px;
+            color: var(--orange);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .traject-footer {
+            text-align: center;
+            margin-top: 48px;
+            padding: 32px;
+            background: var(--orange-light);
+            border-radius: 12px;
+            border: 1px solid var(--orange);
+        }
+
+        .traject-footer p {
+            font-size: 16px;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .traject-cta {
+            text-align: center;
+            margin-top: 32px;
+        }
+
+        @media (max-width: 1024px) {
+            .traject-grid {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .traject-arrow {
+                transform: rotate(90deg);
+            }
+
+            .traject-step {
+                max-width: 100%;
+            }
+        }
+
+        .scarcity {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--orange-light);
+            border: 1px solid var(--orange);
+            border-radius: 20px;
+            padding: 6px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--orange);
+            margin-bottom: 24px;
+        }
+
+        .scarcity-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--orange);
+            border-radius: 50%;
+            animation: pulse-dot 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 36px 0;
+        }
+
+        .footer-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        /* Orange stripe */
+        .orange-stripe {
+            height: 4px;
+            background: var(--orange);
+            width: 100%;
+        }
+
+        /* Responsive */
+        @media (max-width: 680px) {
+            .stats { grid-template-columns: 1fr; }
+            .problem-grid { grid-template-columns: 1fr; }
+            .offer-items { grid-template-columns: 1fr; }
+            .about-grid { grid-template-columns: 1fr; gap: 32px; }
+
+            .hero { padding: 120px 0 60px; }
+            .cta-box { padding: 36px 20px; }
+            .offer-body { padding: 20px; }
+            .offer-header { padding: 20px; }
+            section { padding: 64px 0; }
+            .container { padding: 0 20px; }
+
+            .hero-logo-wordmark { font-size: 36px; }
+            .hero h1 { font-size: 28px; }
+            .hero p { font-size: 16px; }
+            .section-title { font-size: 26px; }
+
+            .btn-primary { width: 100%; justify-content: center; }
+            .hero-cta { flex-direction: column; width: 100%; }
+        }
+    </style>
 </head>
 <body>
+    <div class="orange-stripe"></div>
 
-<!-- BACKGROUND -->
-<canvas id="wave-canvas"></canvas>
-<div class="grid-bg"></div>
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="orb orb-3"></div>
-
-<div class="orange-stripe"></div>
-
-<!-- NAV -->
-<nav>
-  <div class="nav-inner">
-    <a href="#" class="logo">
-      <div class="logo-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <path d="M12 3L22 20H2L12 3Z" stroke="white" stroke-width="1.8" stroke-linejoin="round" fill="none"/>
-          <line x1="6.5" y1="14" x2="17.5" y2="14" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
-          <circle cx="12" cy="3" r="2" fill="white"/>
-        </svg>
-      </div>
-      <div class="logo-wordmark"><span>Ai</span>ventix</div>
-    </a>
-    <a href="https://calendly.com/dhoving147/strategy-call" target="_blank" class="nav-cta">Gratis AI Scan →</a>
-  </div>
-</nav>
-
-<main>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="aurora-wrap" id="aurora">
-    <div class="aurora-horizon"></div>
-  </div>
-  <div class="container">
-    <div class="eyebrow fade-up">AI Procesautomatisering voor MKB</div>
-
-    <div class="hero-logo fade-up fade-up-delay-1">
-      <div class="hero-logo-icon">
-        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-          <path d="M24 7L43 40H5L24 7Z" stroke="white" stroke-width="3" stroke-linejoin="round" fill="none"/>
-          <line x1="13" y1="29" x2="35" y2="29" stroke="white" stroke-width="3" stroke-linecap="round"/>
-          <circle cx="24" cy="7" r="4" fill="white"/>
-        </svg>
-      </div>
-      <div class="hero-logo-wordmark"><span>Ai</span>ventix</div>
-    </div>
-
-    <h1 class="fade-up fade-up-delay-2">Jouw team verliest elke week uren aan werk dat allang <span class="orange">geautomatiseerd had kunnen zijn</span></h1>
-    <p class="fade-up fade-up-delay-3">Ik breng in kaart waar jouw bedrijf uren en euro's laat liggen en automatiseer het met AI.</p>
-
-    <div class="hero-cta fade-up fade-up-delay-4">
-      <a href="https://calendly.com/dhoving147/strategy-call" target="_blank" class="btn-primary">Plan een gratis AI Scan →</a>
-      <a href="#hoe-het-werkt" class="btn-secondary">Hoe werkt het? ↓</a>
-    </div>
-
-    <div class="stats fade-up fade-up-delay-4">
-      <div class="stat">
-        <div class="stat-num">4-10u</div>
-        <div class="stat-label">Gemiddeld verlies per medewerker per week aan handmatig werk</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num" data-count="10" data-suffix="K+">€10K+</div>
-        <div class="stat-label">Aan personeelskosten per persoon per jaar voor geautomatiseerd werk</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num" data-count="72" data-suffix=" uur">72 uur</div>
-        <div class="stat-label">Rapport in je inbox na de scan, met actieplan en ROI-berekening</div>
-      </div>
-    </div>
-  </div>
-
-  <a href="#hoe-het-werkt" class="scroll-indicator">
-    <div class="scroll-arrow"></div>
-  </a>
-</section>
-
-
-<div class="divider"></div>
-
-<!-- PROBLEMS -->
-<section>
-  <div class="container">
-    <div class="section-label fade-up">Het probleem</div>
-    <h2 class="section-title fade-up fade-up-delay-1">Herken jij dit?</h2>
-    <p class="section-sub fade-up fade-up-delay-2">De meeste MKB-bedrijven verliezen dagelijks uren aan taken die allang geautomatiseerd hadden kunnen worden.</p>
-
-    <div class="problem-grid">
-      <div class="problem-card fade-up fade-up-delay-1">
-        <div class="icon">
-          <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="5" y="2" width="16" height="22" rx="2" stroke="#F4622E" stroke-width="1.6"/>
-            <line x1="9" y1="8" x2="17" y2="8" stroke="#F4622E" stroke-width="1.6" stroke-linecap="round"/>
-            <line x1="9" y1="12" x2="17" y2="12" stroke="#F4622E" stroke-width="1.6" stroke-linecap="round"/>
-            <line x1="9" y1="16" x2="14" y2="16" stroke="#F4622E" stroke-width="1.6" stroke-linecap="round"/>
-          </svg>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-inner">
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 3L22 20H2L12 3Z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
+                        <line x1="6.5" y1="14" x2="17.5" y2="14" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+                        <circle cx="12" cy="3" r="2" fill="white"/>
+                    </svg>
+                </div>
+                <div class="logo-wordmark"><span>Ai</span>ventix</div>
+            </a>
+            <button class="nav-cta" onclick="window.open('https://calendly.com/YOUR-CALENDLY-USERNAME', '_blank')">Plan een Quick Scan →</button>
         </div>
-        <h3>Handmatige rapportages</h3>
-        <p>Elke week dezelfde cijfers bij elkaar zoeken, kopiëren en plakken. Werk dat niemand leuk vindt maar altijd gedaan moet worden.</p>
-      </div>
-      <div class="problem-card fade-up fade-up-delay-2">
-        <div class="icon">
-          <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="2" y="5" width="22" height="16" rx="2" stroke="#F4622E" stroke-width="1.6"/>
-            <polyline points="2,6 13,15 24,6" stroke="#F4622E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+    </nav>
+
+    <main>
+        <!-- Hero -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-eyebrow fade-up">AI Procesautomatisering voor MKB</div>
+
+                <div class="hero-logo fade-up fade-up-delay-1">
+                    <div class="hero-logo-icon">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                            <path d="M24 7L43 40H5L24 7Z" stroke="white" stroke-width="3" stroke-linejoin="round"/>
+                            <line x1="13" y1="29" x2="35" y2="29" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                            <circle cx="24" cy="7" r="4" fill="white"/>
+                        </svg>
+                    </div>
+                    <div class="hero-logo-wordmark"><span>Ai</span>ventix</div>
+                </div>
+
+                <h1 class="fade-up fade-up-delay-2">Geen losse tools, geen AI-stress. <br>Eén partner die meeloopt, meedenkt en <span class="orange">meebouwt</span>.</h1>
+                <p class="fade-up fade-up-delay-3">Ik verdiep me in jouw bedrijf en houd de AI-ontwikkelingen bij zodat jij je kunt focussen op ondernemen.</p>
+
+                <div class="hero-cta fade-up fade-up-delay-4">
+                    <button class="btn-primary" onclick="window.open('https://calendly.com/YOUR-CALENDLY-USERNAME', '_blank')">Plan een gratis AI Quick Scan →</button>
+                    <a href="#hoe-het-werkt" class="btn-secondary">Hoe werkt het? ↓</a>
+                </div>
+
+                <div class="stats fade-up fade-up-delay-4">
+                    <div class="stat">
+                        <div class="stat-num">4-10u</div>
+                        <div class="stat-label">Gemiddeld verlies per medewerker per week aan handmatig werk</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num">€10K+</div>
+                        <div class="stat-label">Aan personeelskosten per persoon per jaar voor geautomatiseerd werk</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num">72 uur</div>
+                        <div class="stat-label">Rapport in je inbox na de scan, met actieplan en ROI-berekening</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Herkenning -->
+        <section>
+            <div class="container">
+                <div class="section-label fade-up">Het probleem</div>
+                <h2 class="section-title fade-up fade-up-delay-1">Herken jij dit?</h2>
+                <p class="section-sub fade-up fade-up-delay-2">De meeste MKB-bedrijven verliezen dagelijks uren aan taken die allang geautomatiseerd hadden kunnen worden.</p>
+
+                <div class="problem-grid">
+                    <div class="problem-card fade-up fade-up-delay-1">
+                        <div class="icon">
+                            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+                                <rect x="5" y="2" width="16" height="22" rx="2" stroke="#F4622E" stroke-width="1.6"/>
+                                <line x1="9" y1="8" x2="17" y2="8" stroke="#F4622E" stroke-width="1.6" stroke-linecap="round"/>
+                                <line x1="9" y1="12" x2="17" y2="12" stroke="#F4622E" stroke-width="1.6" stroke-linecap="round"/>
+                                <line x1="9" y1="16" x2="14" y2="16" stroke="#F4622E" stroke-width="1.6" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <h3>Handmatige rapportages</h3>
+                        <p>Elke week dezelfde data verzamelen, formatteren en delen. 10+ uren per week verloren aan kopiëren en plakken.</p>
+                    </div>
+                    <div class="problem-card fade-up fade-up-delay-2">
+                        <div class="icon">
+                            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+                                <rect x="2" y="5" width="22" height="16" rx="2" stroke="#F4622E" stroke-width="1.6"/>
+                                <polyline points="2,6 13,15 24,6" stroke="#F4622E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3>Verloren leads</h3>
+                        <p>Aanvragen en mails verspreid over email, Forms en Slack. Prospects wachten dagen op antwoord. Concurrentie is sneller.</p>
+                    </div>
+                    <div class="problem-card fade-up fade-up-delay-3">
+                        <div class="icon">
+                            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+                                <circle cx="13" cy="13" r="11" stroke="#F4622E" stroke-width="1.6"/>
+                                <path d="M13 7V13M13 13L16.5 16.5" stroke="#F4622E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3>Handmatige planning</h3>
+                        <p>Vergaderingen inplannen via e-mail heen en weer. Dubbele boekingen. Geen realtime zichtbaarheid in beschikbaarheid.</p>
+                    </div>
+                    <div class="problem-card fade-up fade-up-delay-4">
+                        <div class="icon">
+                            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+                                <path d="M4 13C4 8.03 8.03 4 13 4C16.5 4 19.5 5.9 21.1 8.7" stroke="#F4622E" stroke-width="1.6" stroke-linecap="round"/>
+                                <path d="M22 13C22 17.97 17.97 22 13 22C9.5 22 6.5 20.1 4.9 17.3" stroke="#F4622E" stroke-width="1.6" stroke-linecap="round"/>
+                                <polyline points="19,5 21.5,9 17,9" stroke="#F4622E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                <polyline points="7,21 4.5,17 9,17" stroke="#F4622E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3>Dubbele data-entry</h3>
+                        <p>Klantinfo in CRM, vervolgens opnieuw in boekhouding en mail. Inconsistenties en fouten als gevolg.</p>
+                    </div>
+                    <div class="problem-card fade-up fade-up-delay-1">
+                        <div class="icon">
+                            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+                                <rect x="2" y="2" width="9" height="9" rx="2" stroke="#F4622E" stroke-width="1.6"/>
+                                <rect x="15" y="2" width="9" height="9" rx="2" stroke="#F4622E" stroke-width="1.6"/>
+                                <rect x="2" y="15" width="9" height="9" rx="2" stroke="#F4622E" stroke-width="1.6"/>
+                                <rect x="15" y="15" width="9" height="9" rx="2" stroke="#F4622E" stroke-width="1.6"/>
+                            </svg>
+                        </div>
+                        <h3>Losse systemen</h3>
+                        <p>CRM, e-mail, boekhouding, planningallemaal apart. Niemand ziet het volledige beeld. Handwerk verbindt ze.</p>
+                    </div>
+                    <div class="problem-card fade-up fade-up-delay-2">
+                        <div class="icon">
+                            <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+                                <path d="M5 13H21M21 13L16 8M21 13L16 18" stroke="#F4622E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="13" cy="13" r="11" stroke="#F4622E" stroke-width="1.6" opacity="0.3"/>
+                            </svg>
+                        </div>
+                        <h3>Herhaalde taken</h3>
+                        <p>Elke dag dezelfde handelingen. Invoices verzenden, betalingsherinneringen, follow-ups. Menselijk werk dat machines kunnen doen.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Wat ik bouw -->
+        <section>
+            <div class="container">
+                <div class="section-label fade-up">Wat ik bouw</div>
+                <h2 class="section-title fade-up fade-up-delay-1">Niet lappen, maar oplossen</h2>
+                <p class="section-sub fade-up fade-up-delay-2">Je krijgt niet een lijst tools. Je krijgt oplossingen die echt werken in jouw bedrijf.</p>
+
+                <div class="build-grid fade-up fade-up-delay-3">
+                    <div class="build-item">
+                        <svg class="build-visual" viewBox="0 0 120 120" fill="none">
+                            <rect x="20" y="30" width="80" height="60" rx="4" stroke="#F4622E" stroke-width="2"/>
+                            <line x1="40" y1="35" x2="100" y2="35" stroke="#F4622E" stroke-width="1.5"/>
+                            <line x1="40" y1="45" x2="100" y2="45" stroke="#F4622E" stroke-width="1.5"/>
+                            <line x1="40" y1="55" x2="100" y2="55" stroke="#F4622E" stroke-width="1.5"/>
+                            <line x1="40" y1="65" x2="100" y2="65" stroke="#F4622E" stroke-width="1.5"/>
+                            <line x1="40" y1="75" x2="100" y2="75" stroke="#F4622E" stroke-width="1.5"/>
+                            <line x1="20" y1="40" x2="35" y2="40" stroke="#F4622E" stroke-width="2"/>
+                            <line x1="20" y1="50" x2="35" y2="50" stroke="#F4622E" stroke-width="2"/>
+                            <line x1="20" y1="60" x2="35" y2="60" stroke="#F4622E" stroke-width="2"/>
+                            <circle cx="27.5" cy="70" r="3" fill="#F4622E"/>
+                        </svg>
+                        <h4>Automatische administratie en facturatie</h4>
+                    </div>
+                    <div class="build-item">
+                        <svg class="build-visual" viewBox="0 0 120 120" fill="none">
+                            <circle cx="60" cy="60" r="35" stroke="#F4622E" stroke-width="2"/>
+                            <path d="M60 30L85 55M60 30L35 55" stroke="#F4622E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="60" cy="60" r="8" fill="#F4622E" opacity="0.3"/>
+                            <line x1="60" y1="60" x2="60" y2="35" stroke="#F4622E" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <h4>Directe leadopvolging</h4>
+                    </div>
+                    <div class="build-item">
+                        <svg class="build-visual" viewBox="0 0 120 120" fill="none">
+                            <path d="M30 40C30 35 35 30 40 30H80C85 30 90 35 90 40V80C90 85 85 90 80 90H40C35 90 30 85 30 80V40Z" stroke="#F4622E" stroke-width="2"/>
+                            <circle cx="50" cy="55" r="4" fill="#F4622E"/>
+                            <circle cx="70" cy="55" r="4" fill="#F4622E"/>
+                            <path d="M45 70H50C52 70 53 71 53 73V75C53 77 52 78 50 78H45C43 78 42 77 42 75V73C42 71 43 70 45 70Z" fill="#F4622E" opacity="0.4"/>
+                            <path d="M70 70H75C77 70 78 71 78 73V75C78 77 77 78 75 78H70C68 78 67 77 67 75V73C67 71 68 70 70 70Z" fill="#F4622E" opacity="0.4"/>
+                        </svg>
+                        <h4>AI-chatbots en klantcontact</h4>
+                    </div>
+                    <div class="build-item">
+                        <svg class="build-visual" viewBox="0 0 120 120" fill="none">
+                            <rect x="20" y="35" width="30" height="30" rx="3" stroke="#F4622E" stroke-width="2"/>
+                            <rect x="70" y="35" width="30" height="30" rx="3" stroke="#F4622E" stroke-width="2"/>
+                            <rect x="20" y="75" width="30" height="30" rx="3" stroke="#F4622E" stroke-width="2"/>
+                            <rect x="70" y="75" width="30" height="30" rx="3" stroke="#F4622E" stroke-width="2"/>
+                            <line x1="50" y1="50" x2="70" y2="50" stroke="#F4622E" stroke-width="1.5" stroke-dasharray="4"/>
+                            <line x1="50" y1="90" x2="70" y2="90" stroke="#F4622E" stroke-width="1.5" stroke-dasharray="4"/>
+                            <line x1="35" y1="65" x2="35" y2="75" stroke="#F4622E" stroke-width="1.5" stroke-dasharray="4"/>
+                            <line x1="85" y1="65" x2="85" y2="75" stroke="#F4622E" stroke-width="1.5" stroke-dasharray="4"/>
+                        </svg>
+                        <h4>Gekoppelde systemen die met elkaar praten</h4>
+                    </div>
+                    <div class="build-item">
+                        <svg class="build-visual" viewBox="0 0 120 120" fill="none">
+                            <circle cx="60" cy="60" r="35" stroke="#F4622E" stroke-width="2"/>
+                            <path d="M60 35V85M35 60H85" stroke="#F4622E" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="60" cy="60" r="6" fill="#F4622E"/>
+                            <circle cx="78" cy="42" r="3" stroke="#F4622E" stroke-width="1.5"/>
+                            <circle cx="42" cy="78" r="3" stroke="#F4622E" stroke-width="1.5"/>
+                        </svg>
+                        <h4>Software op maat</h4>
+                    </div>
+                    <div class="build-item">
+                        <svg class="build-visual" viewBox="0 0 120 120" fill="none">
+                            <rect x="25" y="35" width="70" height="50" rx="3" stroke="#F4622E" stroke-width="2"/>
+                            <line x1="30" y1="50" x2="90" y2="50" stroke="#F4622E" stroke-width="1"/>
+                            <line x1="30" y1="60" x2="90" y2="60" stroke="#F4622E" stroke-width="1"/>
+                            <line x1="30" y1="70" x2="90" y2="70" stroke="#F4622E" stroke-width="1"/>
+                            <circle cx="45" cy="45" r="2.5" fill="#F4622E"/>
+                            <circle cx="60" cy="55" r="2.5" fill="#F4622E"/>
+                            <circle cx="75" cy="65" r="2.5" fill="#F4622E"/>
+                            <polyline points="45,45 60,55 75,65" stroke="#F4622E" stroke-width="1.5" fill="none"/>
+                        </svg>
+                        <h4>Real-time dashboards en inzichten</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- How it works -->
+        <section id="hoe-het-werkt">
+            <div class="container">
+                <div class="section-label fade-up">Hoe het werkt</div>
+                <h2 class="section-title fade-up fade-up-delay-1">Van scan naar resultaat in drie stappen</h2>
+
+                <div class="steps-list">
+                    <div class="step fade-up fade-up-delay-1">
+                        <div class="step-num">01</div>
+                        <div>
+                            <h3>Meelopen</h3>
+                            <p>Ik duik in jouw bedrijf en zie waar tijd weglekt aan werk dat niet hoeft te bestaan.</p>
+                        </div>
+                    </div>
+                    <div class="step fade-up fade-up-delay-2">
+                        <div class="step-num">02</div>
+                        <div>
+                            <h3>Meedenken</h3>
+                            <p>Alle kansen op ROI in kaart gebracht. De quick wins pakken we eerst. Geen 300 toolsalleen degene die voor jóú werken.</p>
+                        </div>
+                    </div>
+                    <div class="step fade-up fade-up-delay-3">
+                        <div class="step-num">03</div>
+                        <div>
+                            <h3>Meebouwen</h3>
+                            <p>Ik bouw de automatiseringen en koppel je systemen. Alles onder één dak, altijd verbeterd.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Offers -->
+        <section>
+            <div class="container">
+                <div class="section-label fade-up">Het aanbod</div>
+                <h2 class="section-title fade-up fade-up-delay-1">Drie fases van samenwerking</h2>
+                <p class="section-sub fade-up fade-up-delay-2">Elke fase staat op zichzelf. Begin waar je wilt, schaal mee als je groeit. Geen verplichtingen.</p>
+
+                <div class="offers-grid offers-three">
+                    <!-- Fase 1: Quick Scan -->
+                    <div class="offer-card offer-1 fade-up fade-up-delay-1">
+                        <div class="offer-badge-top">
+                            <span class="offer-tag">FASE 1</span>
+                        </div>
+                        <h3>Quick Scan</h3>
+                        <p class="offer-desc">Diagnose: waar verliest je bedrijf geld en tijd? Actieplan: wat je eerst aanpakt.</p>
+
+                        <div class="offer-what">
+                            <h4>Deze fase:</h4>
+                            <div class="offer-items">
+                                <div class="offer-item">
+                                    <div class="offer-check">✓</div>
+                                    <p>Diagnose van handmatige processen</p>
+                                </div>
+                                <div class="offer-item">
+                                    <div class="offer-check">✓</div>
+                                    <p>3–5 concrete automatiseringsmogelijkheden</p>
+                                </div>
+                                <div class="offer-item">
+                                    <div class="offer-check">✓</div>
+                                    <p>ROI-berekening per oplossing</p>
+                                </div>
+                                <div class="offer-item">
+                                    <div class="offer-check">✓</div>
+                                    <p>Prioriteit: welke quick win eerst</p>
+                                </div>
+                                <div class="offer-item">
+                                    <div class="offer-check">✓</div>
+                                    <p>Actieplan voor implementatie</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="offer-timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-dot">1</div>
+                                <p><strong>Call:</strong> 60–90 min</p>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot">2</div>
+                                <p><strong>Rapport:</strong> 72 uur</p>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot">3</div>
+                                <p><strong>Debrief:</strong> 45 min</p>
+                            </div>
+                        </div>
+
+                        <button class="btn-primary btn-full" onclick="window.open('https://calendly.com/YOUR-CALENDLY-USERNAME', '_blank')">Plan je scan →</button>
+                        <p class="fase-note-small">Geen verplichtingen. Je krijgt het volledige rapport. Daarna beslis jij.</p>
+                    </div>
+
+                    <!-- Fase 2: AI Sprint -->
+                    <div class="offer-card offer-2 offer-featured fade-up fade-up-delay-2">
+                        <div class="offer-badge-top">
+                            <span class="offer-tag offer-tag-featured">FASE 2</span>
+                        </div>
+                        <h3>AI Sprint</h3>
+                        <p class="offer-desc">De eerste quick wins uit je scan, gebouwd en live in 2-4 weken. Direct resultaat, direct ROI.</p>
+
+                        <div class="offer-what">
+                            <h4>Deze fase:</h4>
+                            <div class="offer-items">
+                                <div class="offer-item">
+                                    <div class="offer-check">✓</div>
+                                    <p>Scan + Rapport (als je die nog niet hebt)</p>
+                                </div>
+                                <div class="offer-item">
+                                    <div class="offer-check">✓</div>
+                                    <p>De #1 prioriteit volledig gebouwd</p>
+                                </div>
+                                <div class="offer-item">
+                                    <div class="offer-check">✓</div>
+                                    <p>Systemen gekoppeld & getest</p>
+                                </div>
+                                <div class="offer-item">
+                                    <div class="offer-check">✓</div>
+                                    <p>Trainingen voor je team</p>
+                                </div>
+                                <div class="offer-item">
+                                    <div class="offer-check">✓</div>
+                                    <p>30 dagen ondersteuning na go-live</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="offer-scope">
+                            <p><strong>Scope:</strong> 1–2 automatiseringen uit je roadmap</p>
+                            <p><strong>Timeline:</strong> 2–4 weken van start tot live</p>
+                        </div>
+
+                        <div class="offer-scope-white">
+                            <p><strong>Wat je bereikt:</strong> Direct meetbare resultaten. Je team bespaart uren per week. ROI zichtbaar in de eerste maand.</p>
+                        </div>
+                    </div>
+
+                    <!-- Fase 3: Volledige Automatisering -->
+                    <div class="offer-card offer-3 fade-up fade-up-delay-3">
+                        <div class="offer-badge-top">
+                            <span class="offer-tag">FASE 3</span>
+                        </div>
+                        <h3>Volledige Automatisering</h3>
+                        <p class="offer-desc">Je hele roadmap gebouwd. Alle systemen gekoppeld. Jij groeit, ik schaal mee.</p>
+
+                        <div class="offer-what">
+                            <h4>Deze fase:</h4>
+                            <div class="offer-items">
+                                <div class="offer-item">
+                                    <div class="offer-check">✓</div>
+                                    <p>Volledige roadmap gebouwd (stap voor stap)</p>
+                                </div>
+                                <div class="offer-item">
+                                    <div class="offer-check">✓</div>
+                                    <p>Alle systemen gekoppeldéén centraal platform</p>
+                                </div>
+                                <div class="offer-item">
+                                    <div class="offer-check">✓</div>
+                                    <p>Custom AI-werkstromen op maat</p>
+                                </div>
+                                <div class="offer-item">
+                                    <div class="offer-check">✓</div>
+                                    <p>Permanente ondersteuning & optimalisatie</p>
+                                </div>
+                                <div class="offer-item">
+                                    <div class="offer-check">✓</div>
+                                    <p>Maandelijks check-in + AI-updates</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="offer-scope">
+                            <p><strong>Scope:</strong> 3+ automatiseringen, integrale aanpak</p>
+                            <p><strong>Timeline:</strong> 2–3 maanden (in fases)</p>
+                        </div>
+
+                        <div class="offer-scope offer-scope-white">
+                            <p><strong>Wat je bereikt:</strong> Alle handmatige processen weg. Alle systemen gekoppeld. Jij en je team volledig bevrijd. Maximale ROI.</p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="offers-footer fade-up fade-up-delay-4">
+                    <p><strong>Alle fases beginnen met de scan.</strong> Geen verplichtingen. Jij beslist daarna waar je heen gaat.</p>
+                    <button class="btn-primary" onclick="window.open('https://calendly.com/YOUR-CALENDLY-USERNAME', '_blank')">Plan je scan →</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- Traject -->
+        <section id="traject">
+            <div class="container">
+                <div class="section-label fade-up">Het traject</div>
+                <h2 class="section-title fade-up fade-up-delay-1">Zo ziet een samenwerking eruit</h2>
+                <p class="section-sub fade-up fade-up-delay-2">Je zit nergens aan vast. Elke stap bewijst zich eerst, voordat de volgende begint.</p>
+
+                <div class="traject-grid fade-up fade-up-delay-3">
+                    <div class="traject-step">
+                        <div class="traject-number">1</div>
+                        <h3>AI Quick Scan</h3>
+                        <p>Eén gesprek en binnen een week een rapport met 3–5 concrete besparingen. Het rapport is van jouook zonder vervolg.</p>
+                    </div>
+                    <div class="traject-arrow">→</div>
+                    <div class="traject-step">
+                        <div class="traject-number">2</div>
+                        <h3>Eerste quick win</h3>
+                        <p>De besparing met de meeste impact uit het rapport, gebouwd tegen een vaste projectprijs. Binnen twee weken live, direct minder handwerk.</p>
+                    </div>
+                    <div class="traject-arrow">→</div>
+                    <div class="traject-step">
+                        <div class="traject-number">3</div>
+                        <h3>AI Partner</h3>
+                        <p>Ik voer de rest van de roadmap stap voor stap uit, onderhoud wat er draait en houd de AI-ontwikkelingen voor je bij. Jij onderneemt, ik automatiseer.</p>
+                    </div>
+                </div>
+
+                <div class="traject-footer fade-up fade-up-delay-4">
+                    <p><strong>Waar het eindigt, bepaal jij. Waar het begint, staat vast: bij één goed gesprek.</strong></p>
+                </div>
+
+                <div class="traject-cta fade-up fade-up-delay-4">
+                    <button class="btn-primary" onclick="window.open('https://calendly.com/YOUR-CALENDLY-USERNAME', '_blank')">Plan een gratis AI Quick Scan →</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- FAQ -->
+        <section>
+            <div class="container">
+                <div class="section-label fade-up">Veelgestelde vragen</div>
+                <h2 class="section-title fade-up fade-up-delay-1">Nog vragen?</h2>
+                <div class="faq-list fade-up fade-up-delay-2">
+                    <div class="faq-item">
+                        <div class="faq-question">Hoeveel tijd kost het mij?<div class="faq-icon">+</div></div>
+                        <div class="faq-answer">De call duurt 30-45 minuten. Daarna doe ik het werk. Het rapport ligt binnen 72 uur in je inbox.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Wat als ik niet technisch ben?<div class="faq-icon">+</div></div>
+                        <div class="faq-answer">Geen probleem. Je hoeft niks technisch te weten. Ik leg alles in gewone taal uit en geef je concrete adviezen.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Zit ik ergens aan vast?<div class="faq-icon">+</div></div>
+                        <div class="faq-answer">Nee. De scan is volledig gratis en zonder verplichtingen. Jij beslist zelf of je verder wilt.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Voor welke bedrijven is dit geschikt?<div class="faq-icon">+</div></div>
+                        <div class="faq-answer">Voor MKB-bedrijven met 5 tot 100 medewerkers die voelen dat handmatige processen tijd kosten. Sector maakt niet uit.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Wat als de scan niks oplevert?<div class="faq-icon">+</div></div>
+                        <div class="faq-answer">Dan heb je alsnog een gratis analyse van je bedrijfsprocessen. Maar: ik heb nog geen bedrijf gezien dat gén tijd verliest.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- CTA -->
+        <section class="cta-section">
+            <div class="container">
+                <div class="cta-box fade-up">
+                    <div class="scarcity"><div class="scarcity-dot"></div> Nog 3 plekken beschikbaar deze maand</div>
+                    <h2>Klaar om tijd terug te winnen?</h2>
+                    <p>Plan een gratis AI Quick Scan en ontdek hoeveel uren en euro's jouw bedrijf elke week laat liggen.</p>
+                    <button class="btn-primary" onclick="window.open('https://calendly.com/YOUR-CALENDLY-USERNAME', '_blank')">Plan jouw gratis scan →</button>
+                    <p class="cta-note">30-45 minuten call · Rapport binnen 72 uur · Geen verplichtingen</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-inner">
+                <a href="#" class="logo">
+                    <div class="logo-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 3L22 20H2L12 3Z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
+                            <line x1="6.5" y1="14" x2="17.5" y2="14" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+                            <circle cx="12" cy="3" r="2" fill="white"/>
+                        </svg>
+                    </div>
+                    <div class="logo-wordmark"><span>Ai</span>ventix</div>
+                </a>
+                <p class="footer-text">© 2025 Aiventix · AI Procesautomatisering voor MKB</p>
+            </div>
         </div>
-        <h3>Eindeloze opvolging</h3>
-        <p>Klanten, leads of collega's handmatig opvolgen via e-mail of telefoon. Dingen vallen tussen wal en schip.</p>
-      </div>
-      <div class="problem-card fade-up fade-up-delay-3">
-        <div class="icon">
-          <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4 13C4 8.03 8.03 4 13 4C16.5 4 19.5 5.9 21.1 8.7" stroke="#F4622E" stroke-width="1.6" stroke-linecap="round"/>
-            <path d="M22 13C22 17.97 17.97 22 13 22C9.5 22 6.5 20.1 4.9 17.3" stroke="#F4622E" stroke-width="1.6" stroke-linecap="round"/>
-            <polyline points="19,5 21.5,9 17,9" stroke="#F4622E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            <polyline points="7,21 4.5,17 9,17" stroke="#F4622E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <h3>Gegevens overzetten</h3>
-        <p>Informatie van het ene systeem naar het andere kopiëren. Foutgevoelig, tijdrovend en volkomen onnodig.</p>
-      </div>
-      <div class="problem-card fade-up fade-up-delay-4">
-        <div class="icon">
-          <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="2" y="2" width="9" height="9" rx="2" stroke="#F4622E" stroke-width="1.6"/>
-            <rect x="15" y="2" width="9" height="9" rx="2" stroke="#F4622E" stroke-width="1.6"/>
-            <rect x="2" y="15" width="9" height="9" rx="2" stroke="#F4622E" stroke-width="1.6"/>
-            <rect x="15" y="15" width="9" height="9" rx="2" stroke="#F4622E" stroke-width="1.6"/>
-            <line x1="11" y1="6.5" x2="15" y2="6.5" stroke="#F4622E" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="2 2"/>
-            <line x1="11" y1="19.5" x2="15" y2="19.5" stroke="#F4622E" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="2 2"/>
-            <line x1="6.5" y1="11" x2="6.5" y2="15" stroke="#F4622E" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="2 2"/>
-            <line x1="19.5" y1="11" x2="19.5" y2="15" stroke="#F4622E" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="2 2"/>
-          </svg>
-        </div>
-        <h3>Losse systemen die niet praten</h3>
-        <p>CRM, e-mail, boekhouding, planning — allemaal apart. Iemand moet de brug zijn tussen die systemen.</p>
-      </div>
-    </div>
-  </div>
-</section>
+    </footer>
 
+    <div class="orange-stripe"></div>
 
-<div class="divider"></div>
+    <script>
+        // Fade up on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(el => {
+                if (el.isIntersecting) el.target.classList.add('visible');
+            });
+        }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+        setTimeout(() => {
+            document.querySelectorAll('.hero .fade-up').forEach(el => el.classList.add('visible'));
+        }, 100);
 
-<!-- HOW IT WORKS -->
-<section id="hoe-het-werkt" style="padding-bottom: 64px;">
-  <div class="container">
-    <div class="section-label fade-up">Hoe het werkt</div>
-    <h2 class="section-title fade-up fade-up-delay-1">Van scan naar resultaat<br>in drie stappen</h2>
+        // FAQ Toggle
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const isOpen = item.classList.contains('open');
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                if (!isOpen) item.classList.add('open');
+            });
+        });
 
-    <div class="steps-list">
-      <div class="step fade-up fade-up-delay-1">
-        <div class="step-num">01</div>
-        <div>
-          <h3>We kijken samen naar je business</h3>
-          <p>In een call van 30-45 minuten nemen we een deep dive in je belangrijkste processen. Van leadopvolging en administratie tot rapportages en klantcommunicatie. Ik breng in kaart waar de meeste tijd verloren gaat en waar de grootste kansen liggen.</p>
-        </div>
-      </div>
-      <div class="step fade-up fade-up-delay-2">
-        <div class="step-num">02</div>
-        <div>
-          <h3>Je krijgt een professioneel rapport</h3>
-          <p>Binnen 72 uur ontvang je een uitgebreide analyse op maat. Waar laat je geld liggen, welke automatiseringen geven de hoogste ROI, wat is de terugverdientijd per oplossing en hoeveel uur je team wekelijks terugkrijgt. Concreet, cijfermatig en direct toepasbaar.</p>
-        </div>
-      </div>
-      <div class="step fade-up fade-up-delay-3">
-        <div class="step-num">03</div>
-        <div>
-          <h3>Jij kiest wat je ermee doet</h3>
-          <p>Wil je het zelf oppakken? Prima. Wil je dat ik het bouw? Dan gaan we aan de slag. Geen gedoe, geen verplichtingen. Je betaalt alleen als je wil dat ik het voor je regel.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<div class="divider"></div>
-
-<!-- OFFER -->
-<section>
-  <div class="container">
-    <div class="section-label fade-up">Het aanbod</div>
-    <h2 class="section-title fade-up fade-up-delay-1">De gratis AI Efficiëntie Scan</h2>
-    <p class="section-sub fade-up fade-up-delay-2">Geen verplichtingen. Geen verborgen kosten. Alleen eerlijk inzicht in waar jouw bedrijf tijd en geld laat liggen.</p>
-
-    <div class="offer-box fade-up fade-up-delay-2">
-      <div class="offer-header">
-        <h3>AI Efficiëntie Scan</h3>
-        <span class="offer-badge">GRATIS — t.w.v. €297</span>
-      </div>
-      <div class="offer-body">
-        <div class="offer-items">
-          <div class="offer-item">
-            <div class="offer-check">✓</div>
-            <p>Precies hoeveel geld jouw bedrijf maandelijks verliest aan handmatig werk</p>
-          </div>
-          <div class="offer-item">
-            <div class="offer-check">✓</div>
-            <p>Alle automatiseringsmogelijkheden in jouw bedrijf, gerangschikt op hoogste ROI</p>
-          </div>
-          <div class="offer-item">
-            <div class="offer-check">✓</div>
-            <p>De terugverdientijd per automatisering, zodat je weet wat je eerst aanpakt</p>
-          </div>
-          <div class="offer-item">
-            <div class="offer-check">✓</div>
-            <p>Hoeveel uur je team wekelijks terugkrijgt na implementatie</p>
-          </div>
-          <div class="offer-item">
-            <div class="offer-check">✓</div>
-            <p>Concrete tooladviezen die je direct kunt implementeren, zonder technische kennis</p>
-          </div>
-          <div class="offer-item">
-            <div class="offer-check">✓</div>
-            <p>Een geprioriteerd actieplan zodat je morgen al kunt beginnen</p>
-          </div>
-        </div>
-        <div class="offer-footer">
-          <div class="offer-price">
-            <strong>€297</strong>
-            <span class="free">Gratis</span>
-            <span style="color:var(--muted);font-size:14px;margin-left:8px;">— geen verplichtingen</span>
-          </div>
-          <a href="https://calendly.com/dhoving147/strategy-call" target="_blank" class="btn-primary">Plan jouw gratis scan →</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-
-
-<div class="divider"></div>
-
-<!-- FAQ -->
-<section>
-  <div class="container">
-    <div class="section-label fade-up">Veelgestelde vragen</div>
-    <h2 class="section-title fade-up fade-up-delay-1">Nog vragen?</h2>
-    <div class="faq-list fade-up fade-up-delay-2">
-      <div class="faq-item">
-        <div class="faq-question">Hoeveel tijd kost het mij?<div class="faq-icon">+</div></div>
-        <div class="faq-answer">De Deep Dive Call duurt 30-45 minuten. Daarna doe ik het werk. Je hoeft verder niks te doen — het rapport ligt binnen 72 uur in je inbox.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question">Wat als ik niet technisch ben?<div class="faq-icon">+</div></div>
-        <div class="faq-answer">Geen probleem. Je hoeft helemaal niks technisch te weten. Ik leg alles in gewone taal uit en geef je concrete adviezen die je zelf kunt oppakken — of ik bouw het gewoon voor je.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question">Zit ik ergens aan vast?<div class="faq-icon">+</div></div>
-        <div class="faq-answer">Nee. De scan is volledig gratis en zonder verplichtingen. Je besluit daarna zelf of je verder wilt. Geen contract, geen factuur, geen verrassingen.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question">Voor welke bedrijven is dit geschikt?<div class="faq-icon">+</div></div>
-        <div class="faq-answer">Voor MKB-bedrijven met 5 tot 100 medewerkers die merken dat handmatige processen tijd kosten. Sector maakt niet uit — ik heb gewerkt met recruitment, e-commerce, marketing en meer.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question">Wat als de scan niks oplevert?<div class="faq-icon">+</div></div>
-        <div class="faq-answer">Dan heb je alsnog een gratis analyse van je bedrijfsprocessen. Maar eerlijk gezegd: ik heb nog geen bedrijf gezien dat géén tijd verliest aan handmatig werk.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- CTA -->
-<section class="cta-section">
-  <div class="container">
-    <div class="cta-box fade-up">
-      <div class="scarcity"><div class="scarcity-dot"></div> Nog 3 plekken beschikbaar deze maand</div>
-      <h2>Klaar om tijd terug te winnen?</h2>
-      <p>Plan een gratis AI Efficiëntie Scan en ontdek hoeveel uren en euro's jouw bedrijf elke week laat liggen.</p>
-      <a href="https://calendly.com/dhoving147/strategy-call" target="_blank" class="btn-primary">Plan jouw gratis scan →</a>
-      <p class="cta-note" style="white-space: nowrap;">30-45 minuten call &nbsp;·&nbsp; Rapport binnen 72 uur &nbsp;·&nbsp; Geen verplichtingen</p>
-    </div>
-  </div>
-</section>
-
-</main>
-
-<!-- FOOTER -->
-<footer>
-  <div class="container">
-    <div class="footer-inner">
-      <a href="#" class="logo">
-        <div class="logo-icon">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M12 3L22 20H2L12 3Z" stroke="white" stroke-width="1.8" stroke-linejoin="round" fill="none"/>
-            <line x1="6.5" y1="14" x2="17.5" y2="14" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
-            <circle cx="12" cy="3" r="2" fill="white"/>
-          </svg>
-        </div>
-        <div class="logo-wordmark"><span>Ai</span>ventix</div>
-      </a>
-      <p class="footer-text">© 2025 Aiventix · AI Procesautomatisering voor MKB</p>
-    </div>
-  </div>
-</footer>
-
-<div class="orange-stripe"></div>
-
-<script>
-
-
-  // ── FADE UP ON SCROLL ──────────────────────────────────────
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(el => {
-      if (el.isIntersecting) el.target.classList.add('visible');
-    });
-  }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-  setTimeout(() => {
-    document.querySelectorAll('.hero .fade-up').forEach(el => el.classList.add('visible'));
-  }, 100);
-
-  // ── STAT COUNTER ANIMATION ─────────────────────────────────
-  function animateCounter(el, target, suffix, duration = 1400) {
-    let start = null;
-    function step(ts) {
-      if (!start) start = ts;
-      const progress = Math.min((ts - start) / duration, 1);
-      const ease = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.round(ease * target) + suffix;
-      if (progress < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
-
-  const statObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      const el = entry.target;
-      const raw = el.dataset.count;
-      if (!raw) return;
-      animateCounter(el, parseFloat(raw), el.dataset.suffix || '');
-      statObserver.unobserve(el);
-    });
-  }, { threshold: 0.5 });
-  document.querySelectorAll('[data-count]').forEach(el => statObserver.observe(el));
-
-
-  // ── FAQ TOGGLE ─────────────────────────────────────────────
-  document.querySelectorAll('.faq-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const isOpen = item.classList.contains('open');
-      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-      if (!isOpen) item.classList.add('open');
-    });
-  });
-
-
-  // ── NEURAL NETWORK CANVAS ──────────────────────────────────
-  (function() {
-    const c = document.getElementById('wave-canvas');
-    const ctx = c.getContext('2d');
-    let W, VH, PH, last = 0;
-    const CONNECT_DIST = 200;
-    const BUFFER = 300; // px buiten viewport nog tekenen
-    let nodes = [];
-
-    function resize() {
-      W  = c.width  = window.innerWidth;
-      VH = window.innerHeight;
-      PH = c.height = document.body.scrollHeight;
-      // Herverdeel nodes over de volledige paginahoogte
-      const COUNT = Math.round((W * PH) / 14000); // dichtheid schaalt mee
-      nodes = Array.from({ length: Math.min(COUNT, 180) }, () => ({
-        x:  Math.random() * W,
-        y:  Math.random() * PH,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        r:  1.2 + Math.random() * 2,
-        pulse: Math.random() * Math.PI * 2,
-      }));
-    }
-    resize();
-    window.addEventListener('resize', () => setTimeout(resize, 250), { passive: true });
-
-    function draw(ts) {
-      if (ts - last < 33) { requestAnimationFrame(draw); return; }
-      last = ts;
-
-      const scrollY = window.scrollY;
-      const top    = scrollY - BUFFER;
-      const bottom = scrollY + VH + BUFFER;
-
-      // Wis alleen het zichtbare gebied
-      ctx.clearRect(0, top, W, VH + BUFFER * 2);
-
-      // Beweeg alle nodes, teken alleen zichtbare
-      nodes.forEach(n => {
-        n.x += n.vx; n.y += n.vy;
-        n.pulse += 0.01;
-        if (n.x < 0)  { n.x = 0;  n.vx *= -1; }
-        if (n.x > W)  { n.x = W;  n.vx *= -1; }
-        if (n.y < 0)  { n.y = 0;  n.vy *= -1; }
-        if (n.y > PH) { n.y = PH; n.vy *= -1; }
-      });
-
-      const visible = nodes.filter(n => n.y >= top && n.y <= bottom);
-
-      // Verbindingslijnen
-      for (let i = 0; i < visible.length; i++) {
-        for (let j = i + 1; j < visible.length; j++) {
-          const dx = visible[i].x - visible[j].x;
-          const dy = visible[i].y - visible[j].y;
-          const d  = Math.sqrt(dx*dx + dy*dy);
-          if (d > CONNECT_DIST) continue;
-          const alpha = (1 - d / CONNECT_DIST) * 0.30;
-          ctx.beginPath();
-          ctx.moveTo(visible[i].x, visible[i].y);
-          ctx.lineTo(visible[j].x, visible[j].y);
-          ctx.strokeStyle = `rgba(244,98,46,${alpha.toFixed(2)})`;
-          ctx.lineWidth = 0.7;
-          ctx.stroke();
-        }
-      }
-
-      // Nodes
-      visible.forEach(n => {
-        const p = 0.5 + 0.5 * Math.sin(n.pulse);
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, n.r * (0.8 + p * 0.4), 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(244,98,46,${(0.45 + p * 0.45).toFixed(2)})`;
-        ctx.fill();
-      });
-
-      requestAnimationFrame(draw);
-    }
-    requestAnimationFrame(draw);
-  })();
-
-  // ── NAV SCROLL ─────────────────────────────────────────────
-  window.addEventListener('scroll', () => {
-    document.querySelector('nav').style.background =
-      window.scrollY > 40 ? 'rgba(11,10,9,0.97)' : 'rgba(11,10,9,0.85)';
-  }, { passive: true });
-</script>
-
+        // Nav scroll
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+        }, { passive: true });
+    </script>
 </body>
 </html>
